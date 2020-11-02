@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "type": "secrets",
+      "connectionId": "VaultRoker2"
+    },
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "RockBotPanel"
+    }
+  }
+}
