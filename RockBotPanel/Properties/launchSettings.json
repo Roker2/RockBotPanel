@@ -1,4 +1,4 @@
-{
+﻿{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
@@ -12,9 +12,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "VaultRoker2": "https://rockbotpanelvault.vault.azure.net/",
-        "AZURE_USERNAME": "dimaminko2000@yandex.ru"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "RockBotPanel": {
@@ -22,9 +20,7 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "VaultRoker2": "https://rockbotpanelvault.vault.azure.net/",
-        "AZURE_USERNAME": "dimaminko2000@yandex.ru"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }
