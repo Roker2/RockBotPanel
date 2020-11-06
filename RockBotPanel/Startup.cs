@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RockBotPanel.Data;
+using Telegram.Bot.Types;
 
 namespace RockBotPanel
 {
@@ -29,6 +30,9 @@ namespace RockBotPanel
 
             services.AddDbContext<PanelDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("PanelDbContext")));
+
+            services.AddDbContext<d940mhn2jd7mllContext>(options =>
+                options.UseNpgsql("connect"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
