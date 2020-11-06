@@ -1,0 +1,49 @@
+﻿@model RockBotPanel.Models.ChatInfo
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>ChatInfo</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="warns_quantity" class="control-label"></label>
+                <input asp-for="warns_quantity" class="form-control" />
+                <span asp-validation-for="warns_quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="welcome" class="control-label"></label>
+                <input asp-for="welcome" class="form-control" />
+                <span asp-validation-for="welcome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="rules" class="control-label"></label>
+                <input asp-for="rules" class="form-control" />
+                <span asp-validation-for="rules" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="disabled_commands" class="control-label"></label>
+                <input asp-for="disabled_commands" class="form-control" />
+                <span asp-validation-for="disabled_commands" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
