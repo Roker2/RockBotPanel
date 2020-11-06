@@ -1,0 +1,53 @@
+﻿@model IEnumerable<RockBotPanel.Models.Chatinfo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.WarnsQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Welcome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rules)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisabledCommands)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.WarnsQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Welcome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rules)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DisabledCommands)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
