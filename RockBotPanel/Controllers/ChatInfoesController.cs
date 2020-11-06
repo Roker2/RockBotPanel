@@ -12,9 +12,9 @@ namespace RockBotPanel.Controllers
 {
     public class ChatInfoesController : Controller
     {
-        private readonly PanelDbContext _context;
+        private readonly BotDbContext _context;
 
-        public ChatInfoesController(PanelDbContext context)
+        public ChatInfoesController(BotDbContext context)
         {
             _context = context;
         }
