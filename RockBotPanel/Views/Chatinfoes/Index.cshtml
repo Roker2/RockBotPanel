@@ -31,6 +31,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @if(item.WarnsQuantity == null)
+                {
+                    item.WarnsQuantity = 5;
+                }
                 @Html.DisplayFor(modelItem => item.WarnsQuantity)
             </td>
             <td>
