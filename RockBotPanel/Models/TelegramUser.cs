@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace RockBotPanel.Models
 {
-    public class TelegramUser
+    public class TelegramUser : IdentityUser
     {
-        [Key]
-        public uint Id { get; set; }
         public int TelegramId { get; set; }
-        public IdentityUser User { get; set; }
     }
 }

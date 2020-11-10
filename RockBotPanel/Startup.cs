@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RockBotPanel.Data;
+using RockBotPanel.Models;
 using Telegram.Bot.Types;
 
 namespace RockBotPanel
@@ -28,11 +30,14 @@ namespace RockBotPanel
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<PanelDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("PanelDbContext")));
-
             services.AddDbContext<d940mhn2jd7mllContext>(options =>
                 options.UseNpgsql("connect"));
+
+            services.AddDbContext<PanelDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityPanelDbContext")));
+
+            services.AddIdentity<TelegramUser, IdentityRole>()
+                .AddEntityFrameworkStores<PanelDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +58,7 @@ namespace RockBotPanel
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
