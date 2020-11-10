@@ -1,18 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RockBotPanel.Data;
 using RockBotPanel.Models;
-using Telegram.Bot.Types;
 
 namespace RockBotPanel
 {
@@ -28,16 +23,16 @@ namespace RockBotPanel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-
             services.AddDbContext<d940mhn2jd7mllContext>(options =>
-                options.UseNpgsql("connect"));
+                options.UseNpgsql(Configuration.GetConnectionString("BotDbContext")));
 
             services.AddDbContext<PanelDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityPanelDbContext")));
 
             services.AddIdentity<TelegramUser, IdentityRole>()
                 .AddEntityFrameworkStores<PanelDbContext>();
+
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
