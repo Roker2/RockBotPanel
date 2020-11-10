@@ -20,10 +20,13 @@
                     <ul class="navbar-nav flex-grow-1">
                         @foreach (KeyValuePair<string, string> value in RockBotPanel.Helpers.LayoutHelper.GetHeaderPages())
                         {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action=@value.Key>@value.Value</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action=@value.Key>@value.Value</a>
+                            </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="account" asp-action="register">Register</a>
+                        </li>
                     </ul>
                 </div>
             </div>
