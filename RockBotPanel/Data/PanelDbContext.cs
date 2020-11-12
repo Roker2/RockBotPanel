@@ -17,6 +17,8 @@ namespace RockBotPanel.Data
         {
             //Database.EnsureCreated();
         }
+
+        public DbSet<TelegramUser> TelegramUser { get; set; }
     }
 
     public class EmployeeFactory : IDesignTimeDbContextFactory<PanelDbContext>
