@@ -23,5 +23,12 @@ namespace RockBotPanel.Helpers
             Telegram.Bot.TelegramBotClient Bot = GenerateBot();
             Bot.SendTextMessageAsync(UserID, str);
         }
+
+        public static String GetUserName(int UserID)
+        {
+            Telegram.Bot.TelegramBotClient Bot = GenerateBot();
+            Telegram.Bot.Types.ChatMember userInfo = Bot.GetChatMemberAsync(UserID, UserID).Result;
+            return userInfo.User.Username;
+        }
     }
 }
