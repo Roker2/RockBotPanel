@@ -15,7 +15,7 @@ namespace RockBotPanel.Models
             get
             {
                 if (!_WarnsQuantity.HasValue)
-                    return 5;
+                    return DefaultsHelper.DefaultWarnsQuantity;
                 return _WarnsQuantity;
             }
             set => _WarnsQuantity = value.GetValueOrDefault();
@@ -25,7 +25,7 @@ namespace RockBotPanel.Models
             get
             {
                 if (_Welcome == null)
-                    return DefaultsHelper.DefaultWelcome();
+                    return DefaultsHelper.DefaultWelcome;
                 return _Welcome;
             }
             set => _Welcome = value;
@@ -35,7 +35,7 @@ namespace RockBotPanel.Models
             get
             {
                 if (_Rules == null)
-                    return DefaultsHelper.DefaultRules();
+                    return DefaultsHelper.DefaultRules;
                 return _Rules;
             }
             set => _Rules = value;

@@ -7,10 +7,10 @@ namespace RockBotPanel.Helpers
 {
     public class DefaultsHelper
     {
-        public static int DefaultWarnsQuantity() => 5;
+        public static int DefaultWarnsQuantity = 5;
 
-        public static string DefaultRules() => "Правила не установлены!";
+        public static string DefaultRules = "Правила не установлены!";
 
-        public static string DefaultWelcome() => "Добро пожаловать, {firstName}!";
+        public static string DefaultWelcome = "Добро пожаловать, {firstName}!";
     }
 }
