@@ -112,13 +112,21 @@ namespace RockBotPanel.Controllers
             string code = RandomHelper.GenerateRandomPassword(10);
             TelegramHelper.SendString(user.TelegramId, code);
 
+            user.LastValidationCode = code;
+            var result = await userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                ViewBag.ErrorMessage = "Can not save validation code";
+                return View("NotFound");
+            }
+
             var model = new EditUserViewModel
             {
                 Id = user.Id,
                 Email = user.Email,
                 UserName = user.UserName,
-                TelegramId = user.TelegramId,
-                GeneratedCode = code
+                TelegramId = user.TelegramId
             };
 
             return View(model);
@@ -136,9 +144,9 @@ namespace RockBotPanel.Controllers
             }
             else
             {
-                if (model.GeneratedCode != model.Code)
+                if (user.LastValidationCode != model.Code)
                 {
-                    ViewBag.ErrorMessage = "Bad code, generated: " + model.GeneratedCode + ", you wrote: " + model.Code;
+                    ViewBag.ErrorMessage = "Bad code, generated: " + user.LastValidationCode + ", you wrote: " + model.Code;
                     return View("NotFound");
                 }
                 user.TelegramId = model.TelegramId;
