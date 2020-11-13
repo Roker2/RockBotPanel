@@ -108,11 +108,7 @@ namespace RockBotPanel.Controllers
             var userClaims = await userManager.GetClaimsAsync(user);
             // GetRolesAsync returns the list of user Roles
             var userRoles = await userManager.GetRolesAsync(user);
-
-            string code = RandomHelper.GenerateRandomPassword(10);
-            TelegramHelper.SendString(user.TelegramId, code);
-
-            user.LastValidationCode = code;
+            user.GenerateValidationCode();
             var result = await userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
@@ -144,7 +140,7 @@ namespace RockBotPanel.Controllers
             }
             else
             {
-                if (user.LastValidationCode != model.Code)
+                if (!user.CheckCode(model.Code))
                 {
                     ViewBag.ErrorMessage = "Bad code, generated: " + user.LastValidationCode + ", you wrote: " + model.Code;
                     return View("NotFound");
