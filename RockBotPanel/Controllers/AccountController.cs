@@ -160,5 +160,57 @@ namespace RockBotPanel.Controllers
                 return View(model);
             }
         }
+
+        //TODO: Add user and chat administrator validation
+        [HttpGet]
+        public async Task<IActionResult> AddChatId()
+        {
+            var user = await userManager.GetUserAsync(User);
+
+            string id = user.Id;
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+
+            var model = new AddChatIdViewModel { };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddChatId(AddChatIdViewModel model)
+        {
+            var user = await userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = "User cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                if (user.ChatIds != null)
+                    user.ChatIds += "|" + model.ChatId.ToString();
+                else
+                    user.ChatIds = model.ChatId.ToString();
+
+                var result = await userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("index", "Chatinfoes");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View(model);
+            }
+        }
     }
 }
