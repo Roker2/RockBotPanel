@@ -12,5 +12,7 @@ namespace RockBotPanel.Models
         public int TelegramId { get; set; }
 
         public String ChatIds { get; set; } // id1|id2|id3
+
+        public String LastValidationCode { get; set; }
     }
 }
