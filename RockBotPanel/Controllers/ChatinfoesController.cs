@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,17 +13,35 @@ namespace RockBotPanel.Controllers
 {
     public class ChatinfoesController : Controller
     {
+        private readonly UserManager<TelegramUser> userManager;
         private readonly d940mhn2jd7mllContext _context;
+        private readonly PanelDbContext _panelContext;
 
-        public ChatinfoesController(d940mhn2jd7mllContext context)
+        public ChatinfoesController(UserManager<TelegramUser> userManager, d940mhn2jd7mllContext context, PanelDbContext panelContext)
         {
             _context = context;
+            _panelContext = panelContext;
+            this.userManager = userManager;
         }
 
         // GET: Chatinfoes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Chatinfo.ToListAsync());
+            TelegramUser user = await userManager.GetUserAsync(User);
+            List<string> ids = user.ChatIds.Split("|").ToList();
+            List<Chatinfo> chats = await _context.Chatinfo.ToListAsync();
+            List<Chatinfo> filteredChats = new List<Chatinfo>();
+
+            foreach(Chatinfo chat in chats)
+            {
+                string chatId = chat.Id.ToString();
+                if (ids.Find(x => x == chatId) != null)
+                {
+                    filteredChats.Add(chat);
+                }
+            }
+
+            return View(filteredChats);
         }
 
         // GET: Chatinfoes/Details/5
