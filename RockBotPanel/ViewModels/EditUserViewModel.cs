@@ -18,5 +18,12 @@ namespace RockBotPanel.ViewModels
 
         [EmailAddress]
         public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Code { get; set; }
+
+        [DataType(DataType.Password)]
+        public string GeneratedCode { get; set; }
     }
 }

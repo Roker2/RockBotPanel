@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RockBotPanel.Models;
 using System.Threading.Tasks;
+using RockBotPanel.Helpers;
 
 namespace RockBotPanel.Controllers
 {
@@ -108,12 +109,16 @@ namespace RockBotPanel.Controllers
             // GetRolesAsync returns the list of user Roles
             var userRoles = await userManager.GetRolesAsync(user);
 
+            string code = RandomHelper.GenerateRandomPassword(10);
+            TelegramHelper.SendString(user.TelegramId, code);
+
             var model = new EditUserViewModel
             {
                 Id = user.Id,
                 Email = user.Email,
                 UserName = user.UserName,
-                TelegramId = user.TelegramId
+                TelegramId = user.TelegramId,
+                GeneratedCode = code
             };
 
             return View(model);
@@ -131,6 +136,11 @@ namespace RockBotPanel.Controllers
             }
             else
             {
+                if (model.GeneratedCode != model.Code)
+                {
+                    ViewBag.ErrorMessage = "Bad code, generated: " + model.GeneratedCode + ", you wrote: " + model.Code;
+                    return View("NotFound");
+                }
                 user.TelegramId = model.TelegramId;
                 user.Email = model.Email;
                 user.UserName = model.UserName;
