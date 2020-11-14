@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Telegram.Bot.Types;
 
 namespace RockBotPanel.Helpers
 {
@@ -29,6 +30,18 @@ namespace RockBotPanel.Helpers
             Telegram.Bot.TelegramBotClient Bot = GenerateBot();
             Telegram.Bot.Types.ChatMember userInfo = Bot.GetChatMemberAsync(UserID, UserID).Result;
             return userInfo.User.Username;
+        }
+
+        public static bool IsAdmin(long ChatID, int UserID)
+        {
+            Telegram.Bot.TelegramBotClient Bot = GenerateBot();
+            ChatMember[] chatAdmins = Bot.GetChatAdministratorsAsync(ChatID).Result;
+            foreach(ChatMember admin in chatAdmins)
+            {
+                if (admin.User.Id == UserID)
+                    return true;
+            }
+            return false;
         }
     }
 }
