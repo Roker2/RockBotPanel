@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using RockBotPanel.Models;
 using System.Threading.Tasks;
 using RockBotPanel.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RockBotPanel.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<TelegramUser> userManager;
@@ -19,12 +21,14 @@ namespace RockBotPanel.Controllers
             this.signInManager = signInManager;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -66,12 +70,14 @@ namespace RockBotPanel.Controllers
             return RedirectToAction("index", "home");
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
