@@ -162,9 +162,42 @@ namespace RockBotPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var chatinfo = await _context.Chatinfo.FindAsync(id);
-            _context.Chatinfo.Remove(chatinfo);
-            await _context.SaveChangesAsync();
+            TelegramUser user = await userManager.GetUserAsync(User);
+            List<string> ids = user.ChatIds.Split("|").ToList();
+            ids.Remove(id.ToString());
+            switch (ids.Count)
+            {
+                //user deleted all chats
+                case 0:
+                    user.ChatIds = null;
+                    break;
+                //user saved only 1 chat
+                case 1:
+                    user.ChatIds = ids[0];
+                    break;
+                //user saved more then 1 chats
+                default:
+                    user.ChatIds = ids[0];
+                    foreach (string chatId in ids)
+                    {
+                        if (chatId == ids[0])
+                            continue;
+                        user.ChatIds += "|" + chatId;
+                    }
+                    break;
+            }
+
+            var result = await userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
 
             return RedirectToAction(nameof(Index));
         }
