@@ -38,7 +38,8 @@ namespace RockBotPanel.Controllers
                 var user = new TelegramUser
                 {
                     UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
+                    TelegramId = model.TelegramId
                 };
 
                 // Store user data in AspNetUsers database table
