@@ -5,6 +5,8 @@ using RockBotPanel.Models;
 using System.Threading.Tasks;
 using RockBotPanel.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using RockBotPanel.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace RockBotPanel.Controllers
 {
@@ -13,8 +15,10 @@ namespace RockBotPanel.Controllers
     {
         private readonly UserManager<TelegramUser> userManager;
         private readonly SignInManager<TelegramUser> signInManager;
+        private readonly d940mhn2jd7mllContext _context;
 
-        public AccountController(UserManager<TelegramUser> userManager,
+        public AccountController(d940mhn2jd7mllContext context,
+            UserManager<TelegramUser> userManager,
             SignInManager<TelegramUser> signInManager)
         {
             this.userManager = userManager;
@@ -208,6 +212,13 @@ namespace RockBotPanel.Controllers
             }
             else
             {
+                Chatinfo chat = await _context.Chatinfo.FirstOrDefaultAsync(m => m.Id == model.ChatId);
+                if(chat == null)
+                {
+                    Chatinfo chatinfo = new Chatinfo();
+                    _context.Add(chatinfo);
+                    await _context.SaveChangesAsync();
+                }
                 if (user.ChatIds != null)
                     user.ChatIds += "|" + model.ChatId.ToString();
                 else
