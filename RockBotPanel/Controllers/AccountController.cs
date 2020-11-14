@@ -165,7 +165,6 @@ namespace RockBotPanel.Controllers
             }
         }
 
-        //TODO: Add user and chat administrator validation
         [HttpGet]
         public async Task<IActionResult> AddChatId()
         {
@@ -192,6 +191,12 @@ namespace RockBotPanel.Controllers
             if (user == null)
             {
                 ViewBag.ErrorMessage = "User cannot be found";
+                return View("NotFound");
+            }
+
+            if (!TelegramHelper.IsAdmin(model.ChatId, user.TelegramId))
+            {
+                ViewBag.ErrorMessage = "You are not admin in " + TelegramHelper.GetChatName(model.ChatId);
                 return View("NotFound");
             }
             else
