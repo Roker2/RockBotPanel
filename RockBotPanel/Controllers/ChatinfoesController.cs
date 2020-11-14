@@ -98,6 +98,29 @@ namespace RockBotPanel.Controllers
                 return NotFound();
             }
 
+            TelegramUser user = await userManager.GetUserAsync(User);
+            if (user.ChatIds == null)
+            {
+                return View(new List<Chatinfo>());
+            }
+            List<string> ids = user.ChatIds.Split("|").ToList();
+            bool found = false;
+
+            foreach (string userChatsId in ids)
+            {
+                if(userChatsId == id.ToString())
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found)
+            {
+                ViewBag.ErrorMessage = "Chat " + id.ToString() + " is not added in your chats";
+                return View("NotFound");
+            }
+
             var chatinfo = await _context.Chatinfo.FindAsync(id);
             if (chatinfo == null)
             {
