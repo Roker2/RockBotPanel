@@ -194,7 +194,7 @@ namespace RockBotPanel.Controllers
                 return View("NotFound");
             }
 
-            if (!TelegramHelper.IsAdmin(model.ChatId, user.TelegramId))
+            if (!user.IsAdmin(model.ChatId))
             {
                 ViewBag.ErrorMessage = "You are not admin in " + TelegramHelper.GetChatName(model.ChatId);
                 return View("NotFound");
