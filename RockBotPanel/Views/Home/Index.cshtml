@@ -1,8 +1,18 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<TelegramUser> SignInManager
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <h1 class="display-4">Welcome @User.Identity.Name</h1>
+    }
+    else
+    {
+        <h1 class="display-4">Welcome</h1>
+        <p>You can <a asp-controller="account" asp-action="register">register</a> account or <a asp-controller="account" asp-action="login">login</a></p>
+    }
 </div>
