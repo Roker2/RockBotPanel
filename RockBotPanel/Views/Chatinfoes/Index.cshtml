@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.WarnsQuantity)
             </th>
             <th>
@@ -31,7 +34,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @if(item.WarnsQuantity == null)
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @if (item.WarnsQuantity == null)
                 {
                     item.WarnsQuantity = 5;
                 }
