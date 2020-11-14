@@ -68,28 +68,6 @@ namespace RockBotPanel.Controllers
             return View(chatinfo);
         }
 
-        // GET: Chatinfoes/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Chatinfoes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,WarnsQuantity,Welcome,Rules,DisabledCommands")] Chatinfo chatinfo)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(chatinfo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(chatinfo);
-        }
-
         // GET: Chatinfoes/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
