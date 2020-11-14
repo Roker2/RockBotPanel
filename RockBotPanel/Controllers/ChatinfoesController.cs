@@ -28,6 +28,10 @@ namespace RockBotPanel.Controllers
         public async Task<IActionResult> Index()
         {
             TelegramUser user = await userManager.GetUserAsync(User);
+            if(user.ChatIds == null)
+            {
+                return View(new List<Chatinfo>());
+            }
             List<string> ids = user.ChatIds.Split("|").ToList();
             List<Chatinfo> chats = await _context.Chatinfo.ToListAsync();
             List<Chatinfo> filteredChats = new List<Chatinfo>();
@@ -161,6 +165,7 @@ namespace RockBotPanel.Controllers
             var chatinfo = await _context.Chatinfo.FindAsync(id);
             _context.Chatinfo.Remove(chatinfo);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
