@@ -17,10 +17,11 @@ namespace RockBotPanel.Controllers
         private readonly SignInManager<TelegramUser> signInManager;
         private readonly d940mhn2jd7mllContext _context;
 
-        public AccountController(d940mhn2jd7mllContext context,
-            UserManager<TelegramUser> userManager,
-            SignInManager<TelegramUser> signInManager)
+        public AccountController(UserManager<TelegramUser> userManager,
+            SignInManager<TelegramUser> signInManager,
+            d940mhn2jd7mllContext context)
         {
+            _context = context;
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
