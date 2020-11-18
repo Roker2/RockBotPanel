@@ -7,6 +7,7 @@ using RockBotPanel.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using RockBotPanel.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace RockBotPanel.Controllers
 {
@@ -89,15 +90,23 @@ namespace RockBotPanel.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(
-                    model.Email, model.Password, model.RememberMe, false);
-
-                if (result.Succeeded)
+                try
                 {
-                    return RedirectToAction("index", "home");
-                }
+                    var result = await signInManager.PasswordSignInAsync(
+                        model.Email, model.Password, model.RememberMe, false);
 
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("index", "home");
+                    }
+
+                    ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                }
+                catch (Exception e)
+                {
+                    ViewBag.ErrorMessage = e;
+                    return View("NotFound");
+                }
             }
 
             return View(model);
