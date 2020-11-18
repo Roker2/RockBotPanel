@@ -163,8 +163,8 @@ namespace RockBotPanel.Controllers
             {
                 if (!user.CheckCode(model.Code))
                 {
-                    ViewBag.ErrorMessage = "Bad code, generated: " + user.LastValidationCode + ", you wrote: " + model.Code;
-                    return View("NotFound");
+                    ModelState.AddModelError(string.Empty, "Bad code, you wrote: " + model.Code);
+                    return View(model);
                 }
                 user.TelegramId = model.TelegramId;
                 user.Email = model.Email;
@@ -227,8 +227,8 @@ namespace RockBotPanel.Controllers
 
             if(!user.CheckCode(model.Code))
             {
-                ViewBag.ErrorMessage = "Bad code, generated: " + user.LastValidationCode + ", you wrote: " + model.Code;
-                return View("NotFound");
+                ModelState.AddModelError(string.Empty, "Bad code, you wrote: " + model.Code);
+                return View(model);
             }
 
             if (!user.IsAdmin(model.ChatId))
