@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockBotPanel.Data;
 using RockBotPanel.Models;
+using RockBotPanel.ViewModels;
 
 namespace RockBotPanel.Controllers
 {
@@ -104,7 +105,7 @@ namespace RockBotPanel.Controllers
             {
                 return NotFound();
             }
-            return View(chatinfo);
+            return View(new ChatinfoEditViewModel(chatinfo));
         }
 
         // POST: Chatinfoes/Edit/5
@@ -112,8 +113,15 @@ namespace RockBotPanel.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,WarnsQuantity,Welcome,Rules,DisabledCommands")] Chatinfo chatinfo)
+        public async Task<IActionResult> Edit(long id, ChatinfoEditViewModel model)
         {
+            Chatinfo chatinfo = new Chatinfo {
+                Id = model.Id,
+                DisabledCommands = model.DisabledCommands,
+                Rules = model.Rules,
+                WarnsQuantity = model.WarnsQuantity,
+                Welcome = model.Welcome
+            };
             if (id != chatinfo.Id)
             {
                 return NotFound();
@@ -139,7 +147,7 @@ namespace RockBotPanel.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(chatinfo);
+            return View(new ChatinfoEditViewModel(chatinfo));
         }
 
         // GET: Chatinfoes/Delete/5
