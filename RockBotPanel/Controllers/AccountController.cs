@@ -199,6 +199,16 @@ namespace RockBotPanel.Controllers
                 return View("NotFound");
             }
 
+
+            user.GenerateValidationCode();
+            var result = await userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                ViewBag.ErrorMessage = "Can not save validation code";
+                return View("NotFound");
+            }
+
             var model = new AddChatIdViewModel { };
 
             return View(model);
@@ -212,6 +222,12 @@ namespace RockBotPanel.Controllers
             if (user == null)
             {
                 ViewBag.ErrorMessage = "User cannot be found";
+                return View("NotFound");
+            }
+
+            if(!user.CheckCode(model.Code))
+            {
+                ViewBag.ErrorMessage = "Bad code, generated: " + user.LastValidationCode + ", you wrote: " + model.Code;
                 return View("NotFound");
             }
 
