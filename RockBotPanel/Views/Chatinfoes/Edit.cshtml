@@ -28,10 +28,21 @@
                 <input asp-for="Rules" class="form-control" />
                 <span asp-validation-for="Rules" class="text-danger"></span>
             </div>
+            <label>Disable commands</label>
             <div class="form-group">
-                <label asp-for="DisabledCommands" class="control-label"></label>
-                <input asp-for="DisabledCommands" class="form-control" />
-                <span asp-validation-for="DisabledCommands" class="text-danger"></span>
+                <label asp-for="Disable_randomal" class="control-label">randomal</label>
+                <input asp-for="Disable_randomal" class="form-control" />
+                <span asp-validation-for="Disable_randomal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Disable_welcome" class="control-label">welcome</label>
+                <input asp-for="Disable_welcome" class="form-control" />
+                <span asp-validation-for="Disable_welcome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Disable_randomsmmq" class="control-label">randomsmmq</label>
+                <input asp-for="Disable_randomsmmq" class="form-control" />
+                <span asp-validation-for="Disable_randomsmmq" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

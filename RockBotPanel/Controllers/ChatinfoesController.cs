@@ -115,13 +115,7 @@ namespace RockBotPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, ChatinfoEditViewModel model)
         {
-            Chatinfo chatinfo = new Chatinfo {
-                Id = model.Id,
-                DisabledCommands = model.DisabledCommands,
-                Rules = model.Rules,
-                WarnsQuantity = model.WarnsQuantity,
-                Welcome = model.Welcome
-            };
+            Chatinfo chatinfo = model.ToChatinfo();
             if (id != chatinfo.Id)
             {
                 return NotFound();
