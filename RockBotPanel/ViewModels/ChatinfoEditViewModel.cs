@@ -9,6 +9,8 @@ namespace RockBotPanel.ViewModels
 {
     public class ChatinfoEditViewModel
     {
+        public ChatinfoEditViewModel()
+        { }
         public ChatinfoEditViewModel(Chatinfo chatinfo)
         {
             Id = chatinfo.Id;
