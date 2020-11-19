@@ -48,7 +48,7 @@ namespace RockBotPanel.Helpers
         {
             Telegram.Bot.TelegramBotClient Bot = GenerateBot();
             Chat chat = Bot.GetChatAsync(ChatID).Result;
-            return chat.FirstName + " " + chat.LastName;
+            return chat.Title;
         }
     }
 }
