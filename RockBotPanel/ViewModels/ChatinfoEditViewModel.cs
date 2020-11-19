@@ -17,12 +17,15 @@ namespace RockBotPanel.ViewModels
             WarnsQuantity = chatinfo.WarnsQuantity.Value;
             Welcome = chatinfo.Welcome;
             Rules = chatinfo.Rules;
-            List<string> commandsList = chatinfo.DisabledCommands.Split(" ").ToList();
-            if (commandsList != null)
+            if(chatinfo.DisabledCommands != null)
             {
-                Disable_randomal = commandsList.Find(x => x == "randomal") != null;
-                Disable_welcome = commandsList.Find(x => x == "welcome") != null;
-                Disable_randomsmmq = commandsList.Find(x => x == "randomsmmq") != null;
+                List<string> commandsList = chatinfo.DisabledCommands.Split(" ").ToList();
+                if (commandsList != null)
+                {
+                    Disable_randomal = commandsList.Find(x => x == "randomal") != null;
+                    Disable_welcome = commandsList.Find(x => x == "welcome") != null;
+                    Disable_randomsmmq = commandsList.Find(x => x == "randomsmmq") != null;
+                }
             }
         }
 
