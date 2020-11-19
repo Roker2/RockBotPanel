@@ -231,7 +231,19 @@ namespace RockBotPanel.Controllers
                 return View(model);
             }
 
-            if (!user.IsAdmin(model.ChatId))
+            bool isAdmin;
+
+            try
+            {
+                isAdmin = user.IsAdmin(model.ChatId);
+            }
+            catch(Exception e)
+            {
+                ViewBag.ErrorMessage = "Bot didn't find chat. If you didn't add bot to chat, do it.";
+                return View("NotFound");
+            }
+
+            if (!isAdmin)
             {
                 ViewBag.ErrorMessage = "You are not admin in " + TelegramHelper.GetChatName(model.ChatId);
                 return View("NotFound");
