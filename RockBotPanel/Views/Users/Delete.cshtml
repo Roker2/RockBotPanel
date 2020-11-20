@@ -11,23 +11,23 @@
     <h4>Users</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Warns)
+        <dt class="col-sm-2">
+            Chat
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Warns)
+        <dd class="col-sm-10">
+            @Html.Raw(RockBotPanel.Helpers.TelegramHelper.GetChatName(Model.Chatid.Value))
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Chatid)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Chatid)
-        </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Userid)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Userid)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Warns)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Warns)
         </dd>
     </dl>
     
