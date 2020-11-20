@@ -34,6 +34,7 @@ namespace RockBotPanel.Controllers
                 if (user.Chatid == id.Value)
                     filteredUsers.Add(user);
             }
+            ViewBag.ChatName = Helpers.TelegramHelper.GetChatName(id.Value);
             return View(filteredUsers);
         }
 
