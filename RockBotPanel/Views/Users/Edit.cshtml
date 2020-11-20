@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Change warns quantity">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -19,13 +19,13 @@
                 <span asp-validation-for="Warns" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Chatid" class="control-label"></label>
-                <input asp-for="Chatid" class="form-control" />
+                <!--label asp-for="Chatid" class="control-label"></label-->
+                <input type="hidden" asp-for="Chatid" class="form-control" />
                 <span asp-validation-for="Chatid" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Userid" class="control-label"></label>
-                <input asp-for="Userid" class="form-control" />
+                <!--label asp-for="Userid" class="control-label"></label-->
+                <input type="hidden" asp-for="Userid" class="form-control" />
                 <span asp-validation-for="Userid" class="text-danger"></span>
             </div>
             <div class="form-group">
