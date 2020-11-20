@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockBotPanel.Data;
+using RockBotPanel.Helpers;
 using RockBotPanel.Models;
 
 namespace RockBotPanel.Controllers
 {
     public class UsersController : Controller
     {
+        private readonly UserManager<TelegramUser> userManager;
         private readonly d940mhn2jd7mllContext _context;
 
-        public UsersController(d940mhn2jd7mllContext context)
+        public UsersController(UserManager<TelegramUser> userManager, d940mhn2jd7mllContext context)
         {
+            this.userManager = userManager;
             _context = context;
         }
 
@@ -95,6 +99,14 @@ namespace RockBotPanel.Controllers
             if (users == null)
             {
                 return NotFound();
+            }
+
+            var user = await userManager.GetUserAsync(User);
+            bool isAdmin = user.IsAdmin(users.Chatid.Value);
+            if (!isAdmin)
+            {
+                ViewBag.ErrorMessage = "You are not admin in " + TelegramHelper.GetChatName(users.Chatid.Value);
+                return View("NotFound");
             }
             return View(users);
         }
