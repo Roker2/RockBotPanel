@@ -28,7 +28,7 @@
                 @Html.DisplayFor(modelItem => item.Userid)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Warns)
+                @Html.DisplayFor(modelItem => item.Warns)/@ViewBag.MaxWarnsQuantity
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

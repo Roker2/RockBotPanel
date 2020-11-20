@@ -35,6 +35,11 @@ namespace RockBotPanel.Controllers
                     filteredUsers.Add(user);
             }
             ViewBag.ChatName = Helpers.TelegramHelper.GetChatName(id.Value);
+
+            //Get max warns quantuty
+            var chatinfo = await _context.Chatinfo
+                .FirstOrDefaultAsync(m => m.Id == id);
+            ViewBag.MaxWarnsQuantity = chatinfo.WarnsQuantity;
             return View(filteredUsers);
         }
 
