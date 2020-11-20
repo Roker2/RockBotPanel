@@ -20,9 +20,21 @@ namespace RockBotPanel.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(long? id)
         {
-            return View(await _context.Users.ToListAsync());
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            List<Users> allUsers = await _context.Users.ToListAsync();
+            List<Users> filteredUsers = new List<Users>();
+            foreach(Users user in allUsers)
+            {
+                if (user.Chatid == id.Value)
+                    filteredUsers.Add(user);
+            }
+            return View(filteredUsers);
         }
 
         // GET: Users/Details/5
