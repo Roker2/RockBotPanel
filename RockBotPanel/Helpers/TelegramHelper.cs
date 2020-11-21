@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
 namespace RockBotPanel.Helpers
@@ -28,7 +25,7 @@ namespace RockBotPanel.Helpers
         public static String GetUserName(int UserID)
         {
             Telegram.Bot.TelegramBotClient Bot = GenerateBot();
-            Telegram.Bot.Types.ChatMember userInfo = Bot.GetChatMemberAsync(UserID, UserID).Result;
+            ChatMember userInfo = Bot.GetChatMemberAsync(UserID, UserID).Result;
             return userInfo.User.Username;
         }
 
