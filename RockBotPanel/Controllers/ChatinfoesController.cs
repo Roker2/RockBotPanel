@@ -17,13 +17,13 @@ namespace RockBotPanel.Controllers
     public class ChatinfoesController : Controller
     {
         private readonly UserManager<TelegramUser> userManager;
-        private readonly d940mhn2jd7mllContext _context;
-        private readonly PanelDbContext _panelContext;
+        private readonly d940mhn2jd7mllContext context;
+        private readonly PanelDbContext panelContext;
 
         public ChatinfoesController(UserManager<TelegramUser> userManager, d940mhn2jd7mllContext context, PanelDbContext panelContext)
         {
-            _context = context;
-            _panelContext = panelContext;
+            this.context = context;
+            this.panelContext = panelContext;
             this.userManager = userManager;
         }
 
@@ -36,7 +36,7 @@ namespace RockBotPanel.Controllers
                 return View(new List<Chatinfo>());
             }
             List<string> ids = user.ChatIds.Split("|").ToList();
-            List<Chatinfo> chats = await _context.Chatinfo.ToListAsync();
+            List<Chatinfo> chats = await context.Chatinfo.ToListAsync();
             List<Chatinfo> filteredChats = new List<Chatinfo>();
 
             foreach(Chatinfo chat in chats)
@@ -59,7 +59,7 @@ namespace RockBotPanel.Controllers
                 return NotFound();
             }
 
-            var chatinfo = await _context.Chatinfo
+            var chatinfo = await context.Chatinfo
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (chatinfo == null)
             {
@@ -100,7 +100,7 @@ namespace RockBotPanel.Controllers
                 return View("NotFound");
             }
 
-            var chatinfo = await _context.Chatinfo.FindAsync(id);
+            var chatinfo = await context.Chatinfo.FindAsync(id);
             if (chatinfo == null)
             {
                 return NotFound();
@@ -125,8 +125,8 @@ namespace RockBotPanel.Controllers
             {
                 try
                 {
-                    _context.Update(chatinfo);
-                    await _context.SaveChangesAsync();
+                    context.Update(chatinfo);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -152,7 +152,7 @@ namespace RockBotPanel.Controllers
                 return NotFound();
             }
 
-            var chatinfo = await _context.Chatinfo
+            var chatinfo = await context.Chatinfo
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (chatinfo == null)
             {
@@ -209,7 +209,7 @@ namespace RockBotPanel.Controllers
 
         private bool ChatinfoExists(long id)
         {
-            return _context.Chatinfo.Any(e => e.Id == id);
+            return context.Chatinfo.Any(e => e.Id == id);
         }
     }
 }
