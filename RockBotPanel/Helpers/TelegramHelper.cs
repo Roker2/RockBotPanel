@@ -29,6 +29,20 @@ namespace RockBotPanel.Helpers
             return userInfo.User.Username;
         }
 
+        public static String GetUserName(int UserID, long ChatID)
+        {
+            Telegram.Bot.TelegramBotClient Bot = GenerateBot();
+            try
+            {
+                ChatMember userInfo = Bot.GetChatMemberAsync(ChatID, UserID).Result;
+                return userInfo.User.Username;
+            }
+            catch(AggregateException e)
+            {
+                return "User is't in chat";
+            }
+        }
+
         public static bool IsAdmin(long ChatID, int UserID)
         {
             Telegram.Bot.TelegramBotClient Bot = GenerateBot();
