@@ -158,7 +158,7 @@ namespace RockBotPanel.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("index", "chatinfoes");
+                return RedirectToAction(nameof(Index), new { id = users.Chatid });
             }
             return View(users);
         }
@@ -189,7 +189,7 @@ namespace RockBotPanel.Controllers
             var users = await _context.Users.FindAsync(id);
             _context.Users.Remove(users);
             await _context.SaveChangesAsync();
-            return RedirectToAction("index", "chatinfoes");
+            return RedirectToAction(nameof(Index), new { id = users.Chatid });
         }
 
         private bool UsersExists(long id)
