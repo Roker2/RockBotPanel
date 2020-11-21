@@ -101,7 +101,12 @@ namespace RockBotPanel.Controllers
         {
             if (ModelState.IsValid)
             {
-                Users users = new Users {Id = model.Userid + model.Chatid, Chatid = model.Chatid, Userid = model.Userid, Warns = model.Warns };
+                Users users = new Users {
+                    Id = model.Userid + model.Chatid,
+                    Chatid = model.Chatid,
+                    Userid = model.Userid,
+                    Warns = model.Warns
+                };
                 _context.Add(users);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("index", "chatinfoes");
