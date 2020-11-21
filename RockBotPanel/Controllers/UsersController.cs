@@ -137,13 +137,8 @@ namespace RockBotPanel.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Warns,Chatid,Userid")] Users users)
+        public async Task<IActionResult> Edit([Bind("Id,Warns,Chatid,Userid")] Users users)
         {
-            if (id != users.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
@@ -155,14 +150,15 @@ namespace RockBotPanel.Controllers
                 {
                     if (!UsersExists(users.Id))
                     {
-                        return NotFound();
+                        ViewBag.ErrorMessage = "User does not exist";
+                        return View("NotFound");
                     }
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("index", "chatinfoes");
             }
             return View(users);
         }
@@ -193,7 +189,7 @@ namespace RockBotPanel.Controllers
             var users = await _context.Users.FindAsync(id);
             _context.Users.Remove(users);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("index", "chatinfoes");
         }
 
         private bool UsersExists(long id)
