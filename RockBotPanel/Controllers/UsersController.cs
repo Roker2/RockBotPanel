@@ -178,6 +178,14 @@ namespace RockBotPanel.Controllers
                 return NotFound();
             }
 
+            var user = await userManager.GetUserAsync(User);
+            bool isAdmin = user.IsAdmin(users.Chatid.Value);
+            if (!isAdmin)
+            {
+                ViewBag.ErrorMessage = "You are not admin in " + TelegramHelper.GetChatName(users.Chatid.Value);
+                return View("NotFound");
+            }
+
             return View(users);
         }
 
