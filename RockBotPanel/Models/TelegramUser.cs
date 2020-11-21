@@ -18,10 +18,11 @@ namespace RockBotPanel.Models
 
         public bool CheckCode(string code) => LastValidationCode == code;
 
+        //save it after sending code
         public void GenerateValidationCode()
         {
             string code = RandomHelper.GenerateRandomPassword(10);
-            TelegramHelper.SendString(TelegramId, code);
+            TelegramHelper.SendString(TelegramId, "Validation code: " + code);
             LastValidationCode = code;
         }
 
