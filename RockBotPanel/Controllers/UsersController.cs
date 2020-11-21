@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using RockBotPanel.Data;
 using RockBotPanel.Helpers;
 using RockBotPanel.Models;
+using RockBotPanel.ViewModels;
 
 namespace RockBotPanel.Controllers
 {
@@ -46,6 +47,8 @@ namespace RockBotPanel.Controllers
             var chatinfo = await _context.Chatinfo
                 .FirstOrDefaultAsync(m => m.Id == id);
             ViewBag.MaxWarnsQuantity = chatinfo.WarnsQuantity;
+
+            ViewBag.Chatid = id;
             return View(filteredUsers);
         }
 
@@ -68,9 +71,24 @@ namespace RockBotPanel.Controllers
         }
 
         // GET: Users/Create
-        public IActionResult Create()
+        //id is chat ID
+        public IActionResult Create(long? chatid)
         {
-            return View();
+            if (chatid == null)
+            {
+                return NotFound();
+            }
+
+            var user = userManager.GetUserAsync(User).Result;
+            bool isAdmin = user.IsAdmin(chatid.Value);
+            if (!isAdmin)
+            {
+                ViewBag.ErrorMessage = "You are not admin in " + TelegramHelper.GetChatName(chatid.Value);
+                return View("NotFound");
+            }
+            CreateUserViewModel model = new CreateUserViewModel { Chatid = chatid.Value };
+
+            return View(model);
         }
 
         // POST: Users/Create
@@ -78,15 +96,16 @@ namespace RockBotPanel.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Warns,Chatid,Userid")] Users users)
+        public async Task<IActionResult> Create(CreateUserViewModel model)
         {
             if (ModelState.IsValid)
             {
+                Users users = new Users {Id = model.Userid + model.Chatid, Chatid = model.Chatid, Userid = model.Userid, Warns = model.Warns };
                 _context.Add(users);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("index", "chatinfoes");
             }
-            return View(users);
+            return View(model);
         }
 
         // GET: Users/Edit/5
