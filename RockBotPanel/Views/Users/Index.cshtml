@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                User
+            </th>
+            <th>
                 User ID
             </th>
             <th>
@@ -24,6 +27,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.Raw(RockBotPanel.Helpers.TelegramHelper.GetUserName((int)item.Userid.Value, item.Chatid.Value))
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Userid)
             </td>
