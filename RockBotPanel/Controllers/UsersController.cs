@@ -14,6 +14,7 @@ using RockBotPanel.ViewModels;
 
 namespace RockBotPanel.Controllers
 {
+    //Table name in the database is "Users". When I did table, I didn't know about rules for table names. Sorry.
     [Authorize]
     public class UsersController : Controller
     {
