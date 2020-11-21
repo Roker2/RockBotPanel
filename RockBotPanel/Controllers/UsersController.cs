@@ -109,7 +109,7 @@ namespace RockBotPanel.Controllers
                 };
                 _context.Add(users);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("index", "chatinfoes");
+                return RedirectToAction(nameof(Index), new { id = users.Chatid });
             }
             return View(model);
         }
