@@ -253,7 +253,10 @@ namespace RockBotPanel.Controllers
                 Chatinfo chat = await _context.Chatinfo.FirstOrDefaultAsync(m => m.Id == model.ChatId);
                 if(chat == null)
                 {
-                    Chatinfo chatinfo = new Chatinfo();
+                    Chatinfo chatinfo = new Chatinfo
+                    {
+                        Id = model.ChatId
+                    };
                     _context.Add(chatinfo);
                     await _context.SaveChangesAsync();
                 }
