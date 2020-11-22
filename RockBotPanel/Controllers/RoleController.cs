@@ -78,6 +78,7 @@ namespace RockBotPanel.Controllers
             // Retrieve all the Users
             foreach (var user in userManager.Users)
             {
+                // Need to set MultipleActiveResultSets=true to connection string
                 // If the user is in this role, add the username to
                 // Users property of EditRoleViewModel. This model
                 // object is then passed to the view for display
