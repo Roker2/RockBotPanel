@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using RockBotPanel.Data;
 using RockBotPanel.Helpers;
 using RockBotPanel.Models;
-using RockBotPanel.ViewModels;
+using RockBotPanel.ViewModels.Users;
 
 namespace RockBotPanel.Controllers
 {
