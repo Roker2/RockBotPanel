@@ -19,12 +19,12 @@ namespace RockBotPanel.Controllers
     public class UsersController : Controller
     {
         private readonly UserManager<TelegramUser> userManager;
-        private readonly d940mhn2jd7mllContext _context;
+        private readonly d940mhn2jd7mllContext context;
 
         public UsersController(UserManager<TelegramUser> userManager, d940mhn2jd7mllContext context)
         {
             this.userManager = userManager;
-            _context = context;
+            this.context = context;
         }
 
         // GET: Users
@@ -35,7 +35,7 @@ namespace RockBotPanel.Controllers
                 return NotFound();
             }
 
-            List<Users> allUsers = await _context.Users.ToListAsync();
+            List<Users> allUsers = await context.Users.ToListAsync();
             List<Users> filteredUsers = new List<Users>();
             foreach(Users user in allUsers)
             {
@@ -45,7 +45,7 @@ namespace RockBotPanel.Controllers
             ViewBag.ChatName = Helpers.TelegramHelper.GetChatName(id.Value);
 
             //Get max warns quantuty
-            var chatinfo = await _context.Chatinfo
+            var chatinfo = await context.Chatinfo
                 .FirstOrDefaultAsync(m => m.Id == id);
             ViewBag.MaxWarnsQuantity = chatinfo.WarnsQuantity;
 
@@ -61,7 +61,7 @@ namespace RockBotPanel.Controllers
                 return NotFound();
             }
 
-            var users = await _context.Users
+            var users = await context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (users == null)
             {
@@ -107,8 +107,8 @@ namespace RockBotPanel.Controllers
                     Userid = model.Userid,
                     Warns = model.Warns
                 };
-                _context.Add(users);
-                await _context.SaveChangesAsync();
+                context.Add(users);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new { id = users.Chatid });
             }
             return View(model);
@@ -122,7 +122,7 @@ namespace RockBotPanel.Controllers
                 return NotFound();
             }
 
-            var users = await _context.Users.FindAsync(id);
+            var users = await context.Users.FindAsync(id);
             if (users == null)
             {
                 return NotFound();
@@ -149,8 +149,8 @@ namespace RockBotPanel.Controllers
             {
                 try
                 {
-                    _context.Update(users);
-                    await _context.SaveChangesAsync();
+                    context.Update(users);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -177,7 +177,7 @@ namespace RockBotPanel.Controllers
                 return NotFound();
             }
 
-            var users = await _context.Users
+            var users = await context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (users == null)
             {
@@ -200,15 +200,15 @@ namespace RockBotPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var users = await _context.Users.FindAsync(id);
-            _context.Users.Remove(users);
-            await _context.SaveChangesAsync();
+            var users = await context.Users.FindAsync(id);
+            context.Users.Remove(users);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index), new { id = users.Chatid });
         }
 
         private bool UsersExists(long id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return context.Users.Any(e => e.Id == id);
         }
     }
 }
