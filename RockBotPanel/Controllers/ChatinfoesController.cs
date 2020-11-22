@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RockBotPanel.Data;
 using RockBotPanel.Models;
-using RockBotPanel.ViewModels;
+using RockBotPanel.ViewModels.Chatinfoes;
 
 namespace RockBotPanel.Controllers
 {
