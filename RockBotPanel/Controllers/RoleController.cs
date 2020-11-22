@@ -38,7 +38,7 @@ namespace RockBotPanel.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("index", "home");
+                    return RedirectToAction("index", "role");
                 }
 
                 foreach (IdentityError error in result.Errors)
