@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockBotPanel.Data;
 using RockBotPanel.Models;
@@ -18,12 +16,10 @@ namespace RockBotPanel.Controllers
     {
         private readonly UserManager<TelegramUser> userManager;
         private readonly d940mhn2jd7mllContext context;
-        private readonly PanelDbContext panelContext;
 
-        public ChatinfoesController(UserManager<TelegramUser> userManager, d940mhn2jd7mllContext context, PanelDbContext panelContext)
+        public ChatinfoesController(UserManager<TelegramUser> userManager, d940mhn2jd7mllContext context)
         {
             this.context = context;
-            this.panelContext = panelContext;
             this.userManager = userManager;
         }
 
