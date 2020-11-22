@@ -1,0 +1,36 @@
+﻿@model RockBotPanel.ViewModels.Role.Details
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>@Model.RoleName</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <div class="card">
+            <div class="card-header">
+                <h3>Users in this role</h3>
+            </div>
+            <div class="card-body">
+                @if (Model.Users.Any())
+                {
+                    foreach (var user in Model.Users)
+                    {
+                        <h5 class="card-title">@user</h5>
+                    }
+                }
+                else
+                {
+                    <h5 class="card-title">None at the moment</h5>
+                }
+            </div>
+    </dl>
+</div>
