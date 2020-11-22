@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using RockBotPanel.ViewModels;
+using RockBotPanel.ViewModels.Role;
 using RockBotPanel.Models;
 
 namespace RockBotPanel.Controllers
