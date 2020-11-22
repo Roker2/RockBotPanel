@@ -90,5 +90,36 @@ namespace RockBotPanel.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditRole(EditRoleViewModel model)
+        {
+            var role = await roleManager.FindByIdAsync(model.Id);
+
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                role.Name = model.RoleName;
+
+                // Update the Role using UpdateAsync
+                var result = await roleManager.UpdateAsync(role);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("index", "role");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View(model);
+            }
+        }
     }
 }
