@@ -1,4 +1,4 @@
-﻿using RockBotPanel.ViewModels;
+﻿using RockBotPanel.ViewModels.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RockBotPanel.Models;
