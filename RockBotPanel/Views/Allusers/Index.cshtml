@@ -24,16 +24,16 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            @if (item.Username != "No username")
-            {
-                <td>
+            <td>
+                @if (item.Username != "No username")
+                {
                     <a href="https://t.me/@item.Username">@@@Html.DisplayFor(modelItem => item.Username)</a>
-                </td>
-            }
-            else
-            {
-                Html.DisplayFor(modelItem => item.Username);
-            }
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.Username)
+                }
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
