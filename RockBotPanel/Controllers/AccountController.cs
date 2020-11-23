@@ -15,15 +15,18 @@ namespace RockBotPanel.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<TelegramUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<TelegramUser> signInManager;
         private readonly d940mhn2jd7mllContext _context;
 
         public AccountController(UserManager<TelegramUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             SignInManager<TelegramUser> signInManager,
             d940mhn2jd7mllContext context)
         {
             _context = context;
             this.userManager = userManager;
+            this.roleManager = roleManager;
             this.signInManager = signInManager;
         }
 
@@ -55,8 +58,13 @@ namespace RockBotPanel.Controllers
                 // SignInManager and redirect to index action of HomeController
                 if (result.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("index", "home");
+                    //Set role "User" as default role
+                    result = await userManager.AddToRoleAsync(user, "User");
+                    if (result.Succeeded)
+                    {
+                        await signInManager.SignInAsync(user, isPersistent: false);
+                        return RedirectToAction("index", "home");
+                    }
                 }
 
                 // If there are any errors, add them to the ModelState object
