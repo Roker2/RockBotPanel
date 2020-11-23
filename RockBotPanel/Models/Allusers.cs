@@ -13,7 +13,7 @@ namespace RockBotPanel.Models
             {
                 if (username == "")
                     return "No username";
-                return "@" + username;
+                return username;
             }
             set => username = value;
         }
