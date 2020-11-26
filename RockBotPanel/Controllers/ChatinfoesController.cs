@@ -153,7 +153,8 @@ namespace RockBotPanel.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(new ChatinfoEditViewModel(chatinfo));
+            _logger.LogInformation("chatinfo model is not valid");
+            return View(model);
         }
 
         // GET: Chatinfoes/Delete/5
