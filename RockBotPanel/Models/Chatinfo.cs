@@ -6,8 +6,11 @@ namespace RockBotPanel.Models
 {
     public partial class Chatinfo
     {
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         private int? _WarnsQuantity;
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         private string _Welcome;
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         private string _Rules;
         public long Id { get; set; }
         public int? WarnsQuantity

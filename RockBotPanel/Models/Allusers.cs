@@ -5,6 +5,7 @@ namespace RockBotPanel.Models
 {
     public partial class Allusers
     {
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         private string username;
         public long Id { get; set; }
         public string Username
