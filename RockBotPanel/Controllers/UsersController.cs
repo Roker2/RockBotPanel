@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RockBotPanel.Data;
 using RockBotPanel.Helpers;
 using RockBotPanel.Models;
@@ -20,11 +21,16 @@ namespace RockBotPanel.Controllers
     {
         private readonly UserManager<TelegramUser> userManager;
         private readonly d940mhn2jd7mllContext context;
+        private readonly ILogger<AccountController> _logger;
 
-        public UsersController(UserManager<TelegramUser> userManager, d940mhn2jd7mllContext context)
+        public UsersController(UserManager<TelegramUser> userManager,
+            d940mhn2jd7mllContext context,
+            ILogger<AccountController> logger)
         {
             this.userManager = userManager;
             this.context = context;
+            _logger = logger;
+            _logger.LogDebug("Users controller constructor");
         }
 
         // GET: Users
@@ -32,6 +38,7 @@ namespace RockBotPanel.Controllers
         {
             if (id == null)
             {
+                _logger.LogError("id is null");
                 return NotFound();
             }
 
@@ -49,6 +56,9 @@ namespace RockBotPanel.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             ViewBag.MaxWarnsQuantity = chatinfo.WarnsQuantity;
 
+            if(filteredUsers.Count == 0)
+                _logger.LogWarning("filteredUsers is empty");
+
             ViewBag.Chatid = id;
             return View(filteredUsers);
         }
@@ -58,6 +68,7 @@ namespace RockBotPanel.Controllers
         {
             if (id == null)
             {
+                _logger.LogError("id is null");
                 return NotFound();
             }
 
@@ -65,6 +76,7 @@ namespace RockBotPanel.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (users == null)
             {
+                _logger.LogError("users is null");
                 return NotFound();
             }
 
@@ -77,6 +89,7 @@ namespace RockBotPanel.Controllers
         {
             if (chatid == null)
             {
+                _logger.LogError("id is null");
                 return NotFound();
             }
 
@@ -85,6 +98,7 @@ namespace RockBotPanel.Controllers
             if (!isAdmin)
             {
                 ViewBag.ErrorMessage = "You are not admin in " + TelegramHelper.GetChatName(chatid.Value);
+                _logger.LogError("You are not admin in " + TelegramHelper.GetChatName(chatid.Value));
                 return View("NotFound");
             }
             CreateUserViewModel model = new CreateUserViewModel { Chatid = chatid.Value };
@@ -111,6 +125,7 @@ namespace RockBotPanel.Controllers
                 await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new { id = users.Chatid });
             }
+            _logger.LogInformation("Users.CreateUserViewModel model is not valid");
             return View(model);
         }
 
@@ -119,12 +134,14 @@ namespace RockBotPanel.Controllers
         {
             if (id == null)
             {
+                _logger.LogError("id is null");
                 return NotFound();
             }
 
             var users = await context.Users.FindAsync(id);
             if (users == null)
             {
+                _logger.LogError("users is null");
                 return NotFound();
             }
 
@@ -132,6 +149,7 @@ namespace RockBotPanel.Controllers
             bool isAdmin = user.IsAdmin(users.Chatid.Value);
             if (!isAdmin)
             {
+                _logger.LogError("You are not admin in " + TelegramHelper.GetChatName(users.Chatid.Value));
                 ViewBag.ErrorMessage = "You are not admin in " + TelegramHelper.GetChatName(users.Chatid.Value);
                 return View("NotFound");
             }
@@ -157,6 +175,7 @@ namespace RockBotPanel.Controllers
                     if (!UsersExists(users.Id))
                     {
                         ViewBag.ErrorMessage = "User does not exist";
+                        _logger.LogError("User does not exist");
                         return View("NotFound");
                     }
                     else
@@ -166,6 +185,7 @@ namespace RockBotPanel.Controllers
                 }
                 return RedirectToAction(nameof(Index), new { id = users.Chatid });
             }
+            _logger.LogInformation("Users model is invalid");
             return View(users);
         }
 
@@ -188,6 +208,7 @@ namespace RockBotPanel.Controllers
             bool isAdmin = user.IsAdmin(users.Chatid.Value);
             if (!isAdmin)
             {
+                _logger.LogError("You are not admin in " + TelegramHelper.GetChatName(users.Chatid.Value));
                 ViewBag.ErrorMessage = "You are not admin in " + TelegramHelper.GetChatName(users.Chatid.Value);
                 return View("NotFound");
             }
