@@ -266,8 +266,8 @@ namespace RockBotPanel.Controllers
             catch(Exception e)
             {
                 _logger.LogError(e.Message);
-                _logger.LogError($"Bot didn't find chat {TelegramHelper.GetChatName(model.ChatId)}");
-                ViewBag.ErrorMessage = $"Bot didn't find chat {TelegramHelper.GetChatName(model.ChatId)}. If you didn't add bot to chat, do it.";
+                _logger.LogError($"Bot didn't find chat {model.ChatId}");
+                ViewBag.ErrorMessage = $"Bot didn't find chat {model.ChatId}. If you didn't add bot to chat, do it.";
                 return View("NotFound");
             }
 
