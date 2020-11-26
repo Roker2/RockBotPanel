@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace RockBotPanel.Helpers
+﻿namespace RockBotPanel.Helpers
 {
-    public class DefaultsHelper
+    public static class DefaultsHelper
     {
         public static int DefaultWarnsQuantity = 5;
 
