@@ -139,6 +139,7 @@ namespace RockBotPanel.Controllers
 
             if (user == null)
             {
+                _logger.LogError($"User with Id = {id} cannot be found");
                 ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
                 return View("NotFound");
             }
@@ -152,6 +153,7 @@ namespace RockBotPanel.Controllers
 
             if (!result.Succeeded)
             {
+                _logger.LogError("Can not save validation code");
                 ViewBag.ErrorMessage = "Can not save validation code";
                 return View("NotFound");
             }
@@ -174,6 +176,7 @@ namespace RockBotPanel.Controllers
 
             if (user == null)
             {
+                _logger.LogError($"User with Id = {model.Id} cannot be found");
                 ViewBag.ErrorMessage = $"User with Id = {model.Id} cannot be found";
                 return View("NotFound");
             }
@@ -181,6 +184,7 @@ namespace RockBotPanel.Controllers
             {
                 if (!user.CheckCode(model.Code))
                 {
+                    _logger.LogError($"Bad code, {user.UserName} wrote: {model.Code}");
                     ModelState.AddModelError(string.Empty, "Bad code, you wrote: " + model.Code);
                     return View(model);
                 }
@@ -213,6 +217,7 @@ namespace RockBotPanel.Controllers
 
             if (user == null)
             {
+                _logger.LogError($"User with Id = {id} cannot be found");
                 ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
                 return View("NotFound");
             }
@@ -223,6 +228,7 @@ namespace RockBotPanel.Controllers
 
             if (!result.Succeeded)
             {
+                _logger.LogError("Can not save validation code");
                 ViewBag.ErrorMessage = "Can not save validation code";
                 return View("NotFound");
             }
@@ -239,6 +245,7 @@ namespace RockBotPanel.Controllers
 
             if (user == null)
             {
+                _logger.LogError("User cannot be found");
                 ViewBag.ErrorMessage = "User cannot be found";
                 return View("NotFound");
             }
@@ -259,12 +266,14 @@ namespace RockBotPanel.Controllers
             catch(Exception e)
             {
                 _logger.LogError(e.Message);
+                _logger.LogError($"Bot didn't find chat {TelegramHelper.GetChatName(model.ChatId)}");
                 ViewBag.ErrorMessage = "Bot didn't find chat. If you didn't add bot to chat, do it.";
                 return View("NotFound");
             }
 
             if (!isAdmin)
             {
+                _logger.LogError($"{user.UserName} is not admin in {TelegramHelper.GetChatName(model.ChatId)}");
                 ViewBag.ErrorMessage = "You are not admin in " + TelegramHelper.GetChatName(model.ChatId);
                 return View("NotFound");
             }
@@ -294,6 +303,7 @@ namespace RockBotPanel.Controllers
 
                 foreach (var error in result.Errors)
                 {
+                    _logger.LogError(error.Description);
                     ModelState.AddModelError("", error.Description);
                 }
 
