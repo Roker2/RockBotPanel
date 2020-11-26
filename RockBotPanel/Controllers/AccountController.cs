@@ -233,7 +233,7 @@ namespace RockBotPanel.Controllers
                 return View("NotFound");
             }
 
-            var model = new AddChatIdViewModel { };
+            var model = new AddChatIdViewModel();
 
             return View(model);
         }
