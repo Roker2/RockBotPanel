@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RockBotPanel.Data;
 using RockBotPanel.Models;
+using RockBotPanel.Services;
 
 namespace RockBotPanel
 {
@@ -31,6 +32,16 @@ namespace RockBotPanel
 
             services.AddIdentity<TelegramUser, IdentityRole>()
                 .AddEntityFrameworkStores<PanelDbContext>();
+
+            services.AddSingleton<IEmailConfiguration>(new EmailConfiguration
+            {
+                SmtpServer = Configuration["EmailConfiguration:SmtpServer"],
+                SmtpPort = int.Parse(Configuration["EmailConfiguration:SmtpPort"]),
+                SmtpUsername = Configuration["EmailConfiguration:SmtpUsername"],
+                SmtpPassword = Configuration["EmailConfiguration:SmtpPassword"]
+            });
+
+            services.AddSingleton<IEmailMessenger, EmailMessenger>();
 
             services.AddControllersWithViews();
         }
