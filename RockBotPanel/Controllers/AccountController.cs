@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using RockBotPanel.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace RockBotPanel.Controllers
 {
@@ -18,16 +19,20 @@ namespace RockBotPanel.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<TelegramUser> signInManager;
         private readonly d940mhn2jd7mllContext _context;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(UserManager<TelegramUser> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<TelegramUser> signInManager,
-            d940mhn2jd7mllContext context)
+            d940mhn2jd7mllContext context,
+            ILogger<AccountController> logger)
         {
             _context = context;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
+            _logger = logger;
+            _logger.LogDebug("Account controller constructor");
         }
 
         [AllowAnonymous]
@@ -71,6 +76,7 @@ namespace RockBotPanel.Controllers
                 // which will be displayed by the validation summary tag helper
                 foreach (var error in result.Errors)
                 {
+                    _logger.LogError(error.Description);
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
@@ -109,9 +115,11 @@ namespace RockBotPanel.Controllers
                     }
 
                     ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                    _logger.LogInformation("Invalid Login Attempt");
                 }
                 catch (Exception e)
                 {
+                    _logger.LogError(e.Message);
                     ViewBag.ErrorMessage = e;
                     return View("NotFound");
                 }
@@ -247,6 +255,7 @@ namespace RockBotPanel.Controllers
             }
             catch(Exception e)
             {
+                _logger.LogError(e.Message);
                 ViewBag.ErrorMessage = "Bot didn't find chat. If you didn't add bot to chat, do it.";
                 return View("NotFound");
             }
