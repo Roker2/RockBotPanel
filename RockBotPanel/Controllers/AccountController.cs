@@ -81,6 +81,7 @@ namespace RockBotPanel.Controllers
                 }
             }
 
+            _logger.LogInformation("RegisterViewModel model is invalid");
             return View(model);
         }
 
@@ -125,6 +126,7 @@ namespace RockBotPanel.Controllers
                 }
             }
 
+            _logger.LogInformation("LoginViewModel model is invalid");
             return View(model);
         }
 
@@ -244,6 +246,7 @@ namespace RockBotPanel.Controllers
             if(!user.CheckCode(model.Code))
             {
                 ModelState.AddModelError(string.Empty, "Bad code, you wrote: " + model.Code);
+                _logger.LogInformation($"Bad code, {user.UserName} wrote: {model.Code}");
                 return View(model);
             }
 
