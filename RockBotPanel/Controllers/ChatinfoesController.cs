@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RockBotPanel.Data;
 using RockBotPanel.Models;
 using RockBotPanel.ViewModels.Chatinfoes;
@@ -16,11 +17,16 @@ namespace RockBotPanel.Controllers
     {
         private readonly UserManager<TelegramUser> userManager;
         private readonly d940mhn2jd7mllContext context;
+        private readonly ILogger<AccountController> _logger;
 
-        public ChatinfoesController(UserManager<TelegramUser> userManager, d940mhn2jd7mllContext context)
+        public ChatinfoesController(UserManager<TelegramUser> userManager,
+            d940mhn2jd7mllContext context,
+            ILogger<AccountController> logger)
         {
             this.context = context;
             this.userManager = userManager;
+            _logger = logger;
+            _logger.LogDebug("Chatinfoes controller constructor");
         }
 
         // GET: Chatinfoes
@@ -44,6 +50,9 @@ namespace RockBotPanel.Controllers
                 }
             }
 
+            if (filteredChats.Count == 0)
+                _logger.LogWarning("filteredChats is empty");
+
             return View(filteredChats);
         }
 
@@ -52,6 +61,7 @@ namespace RockBotPanel.Controllers
         {
             if (id == null)
             {
+                _logger.LogError("id is null");
                 return NotFound();
             }
 
@@ -59,6 +69,7 @@ namespace RockBotPanel.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (chatinfo == null)
             {
+                _logger.LogError("chatinfo is null");
                 return NotFound();
             }
 
@@ -70,12 +81,14 @@ namespace RockBotPanel.Controllers
         {
             if (id == null)
             {
+                _logger.LogError("id is null");
                 return NotFound();
             }
 
             TelegramUser user = await userManager.GetUserAsync(User);
             if (user.ChatIds == null)
             {
+                _logger.LogError("chatinfo is null");
                 return View(new List<Chatinfo>());
             }
             List<string> ids = user.ChatIds.Split("|").ToList();
@@ -93,6 +106,7 @@ namespace RockBotPanel.Controllers
             if(!found)
             {
                 ViewBag.ErrorMessage = "Chat " + id.ToString() + " is not added in your chats";
+                _logger.LogError("Chat " + id.ToString() + " is not added in user chats");
                 return View("NotFound");
             }
 
@@ -114,6 +128,7 @@ namespace RockBotPanel.Controllers
             Chatinfo chatinfo = model.ToChatinfo();
             if (id != chatinfo.Id)
             {
+                _logger.LogError("id and chatinfo.Id are different");
                 return NotFound();
             }
 
@@ -128,6 +143,7 @@ namespace RockBotPanel.Controllers
                 {
                     if (!ChatinfoExists(chatinfo.Id))
                     {
+                        _logger.LogError($"chatinfo {chatinfo.Id} does not exist");
                         return NotFound();
                     }
                     else
@@ -145,6 +161,7 @@ namespace RockBotPanel.Controllers
         {
             if (id == null)
             {
+                _logger.LogError("id is null");
                 return NotFound();
             }
 
@@ -152,6 +169,7 @@ namespace RockBotPanel.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (chatinfo == null)
             {
+                _logger.LogError("chatinfo is null");
                 return NotFound();
             }
 
@@ -197,6 +215,7 @@ namespace RockBotPanel.Controllers
 
             foreach (var error in result.Errors)
             {
+                _logger.LogError(error.Description);
                 ModelState.AddModelError("", error.Description);
             }
 
