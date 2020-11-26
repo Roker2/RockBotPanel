@@ -5,6 +5,8 @@ namespace RockBotPanel.Helpers
 {
     public class TelegramHelper
     {
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         protected static Telegram.Bot.TelegramBotClient GenerateBot()
         {
             return new Telegram.Bot.TelegramBotClient("TOKEN");
@@ -39,6 +41,7 @@ namespace RockBotPanel.Helpers
             }
             catch(AggregateException e)
             {
+                logger.Warn($"User {UserID} is not in chat {ChatID}, error: {e.Message}");
                 return "User is't in chat";
             }
         }
