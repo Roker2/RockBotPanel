@@ -113,6 +113,7 @@ namespace RockBotPanel.Controllers
             var chatinfo = await context.Chatinfo.FindAsync(id);
             if (chatinfo == null)
             {
+                _logger.LogError("chatinfo is null");
                 return NotFound();
             }
             return View(new ChatinfoEditViewModel(chatinfo));
