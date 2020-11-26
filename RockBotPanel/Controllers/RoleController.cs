@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using RockBotPanel.ViewModels.Role;
 using RockBotPanel.Models;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace RockBotPanel.Controllers
 {
@@ -13,10 +14,15 @@ namespace RockBotPanel.Controllers
     {
         private readonly UserManager<TelegramUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        public RoleController(RoleManager<IdentityRole> roleManager, UserManager<TelegramUser> userManager)
+        private readonly ILogger<AccountController> _logger;
+        public RoleController(RoleManager<IdentityRole> roleManager,
+            UserManager<TelegramUser> userManager,
+            ILogger<AccountController> logger)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
+            _logger = logger;
+            _logger.LogDebug("Role controller constructor");
         }
 
         [HttpGet]
@@ -46,10 +52,12 @@ namespace RockBotPanel.Controllers
 
                 foreach (IdentityError error in result.Errors)
                 {
+                    _logger.LogInformation(error.Description);
                     ModelState.AddModelError("", error.Description);
                 }
             }
 
+            _logger.LogInformation("CreateRoleViewModel model is invalid");
             return View(model);
         }
 
@@ -68,6 +76,7 @@ namespace RockBotPanel.Controllers
 
             if (role == null)
             {
+                _logger.LogError($"role with Id = {id} is null");
                 ViewBag.ErrorMessage = $"Role with Id = {id} cannot be found";
                 return View("NotFound");
             }
@@ -101,6 +110,7 @@ namespace RockBotPanel.Controllers
 
             if (role == null)
             {
+                _logger.LogError($"role with Id = {model.Id} is null");
                 ViewBag.ErrorMessage = $"Role with Id = {model.Id} cannot be found";
                 return View("NotFound");
             }
@@ -132,6 +142,7 @@ namespace RockBotPanel.Controllers
 
             if (role == null)
             {
+                _logger.LogError($"role with Id = {id} is null");
                 ViewBag.ErrorMessage = $"Role with Id = {id} cannot be found";
                 return View("NotFound");
             }
@@ -167,6 +178,7 @@ namespace RockBotPanel.Controllers
 
             if (role == null)
             {
+                _logger.LogError($"role with Id = {roleId} is null");
                 ViewBag.ErrorMessage = $"Role with Id = {roleId} cannot be found";
                 return View("NotFound");
             }
@@ -193,6 +205,7 @@ namespace RockBotPanel.Controllers
 
             if (role == null)
             {
+                _logger.LogError($"role with Id = {roleId} is null");
                 ViewBag.ErrorMessage = $"Role with Id = {roleId} cannot be found";
                 return View("NotFound");
             }
