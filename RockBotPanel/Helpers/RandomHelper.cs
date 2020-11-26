@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RockBotPanel.Helpers
 {
-    public class RandomHelper
+    public static class RandomHelper
     {
         public static String GenerateRandomPassword(int length)
         {
