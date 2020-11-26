@@ -185,7 +185,7 @@ namespace RockBotPanel.Controllers
                 if (!user.CheckCode(model.Code))
                 {
                     _logger.LogError($"Bad code, {user.UserName} wrote: {model.Code}");
-                    ModelState.AddModelError(string.Empty, "Bad code, you wrote: " + model.Code);
+                    ModelState.AddModelError(string.Empty, $"Bad code, you wrote: {model.Code}");
                     return View(model);
                 }
                 user.TelegramId = model.TelegramId;
@@ -252,7 +252,7 @@ namespace RockBotPanel.Controllers
 
             if(!user.CheckCode(model.Code))
             {
-                ModelState.AddModelError(string.Empty, "Bad code, you wrote: " + model.Code);
+                ModelState.AddModelError(string.Empty, $"Bad code, you wrote: {model.Code}");
                 _logger.LogInformation($"Bad code, {user.UserName} wrote: {model.Code}");
                 return View(model);
             }
@@ -267,14 +267,14 @@ namespace RockBotPanel.Controllers
             {
                 _logger.LogError(e.Message);
                 _logger.LogError($"Bot didn't find chat {TelegramHelper.GetChatName(model.ChatId)}");
-                ViewBag.ErrorMessage = "Bot didn't find chat. If you didn't add bot to chat, do it.";
+                ViewBag.ErrorMessage = $"Bot didn't find chat {TelegramHelper.GetChatName(model.ChatId)}. If you didn't add bot to chat, do it.";
                 return View("NotFound");
             }
 
             if (!isAdmin)
             {
                 _logger.LogError($"{user.UserName} is not admin in {TelegramHelper.GetChatName(model.ChatId)}");
-                ViewBag.ErrorMessage = "You are not admin in " + TelegramHelper.GetChatName(model.ChatId);
+                ViewBag.ErrorMessage = $"You are not admin in {TelegramHelper.GetChatName(model.ChatId)}";
                 return View("NotFound");
             }
             else

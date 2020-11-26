@@ -76,7 +76,7 @@ namespace RockBotPanel.Controllers
 
             if (role == null)
             {
-                _logger.LogError($"role with Id = {id} is null");
+                _logger.LogError($"Role with Id = {id} is null");
                 ViewBag.ErrorMessage = $"Role with Id = {id} cannot be found";
                 return View("NotFound");
             }
@@ -110,7 +110,7 @@ namespace RockBotPanel.Controllers
 
             if (role == null)
             {
-                _logger.LogError($"role with Id = {model.Id} is null");
+                _logger.LogError($"Role with Id = {model.Id} is null");
                 ViewBag.ErrorMessage = $"Role with Id = {model.Id} cannot be found";
                 return View("NotFound");
             }
@@ -142,7 +142,7 @@ namespace RockBotPanel.Controllers
 
             if (role == null)
             {
-                _logger.LogError($"role with Id = {id} is null");
+                _logger.LogError($"Role with Id = {id} is null");
                 ViewBag.ErrorMessage = $"Role with Id = {id} cannot be found";
                 return View("NotFound");
             }
@@ -178,7 +178,7 @@ namespace RockBotPanel.Controllers
 
             if (role == null)
             {
-                _logger.LogError($"role with Id = {roleId} is null");
+                _logger.LogError($"Role with Id = {roleId} is null");
                 ViewBag.ErrorMessage = $"Role with Id = {roleId} cannot be found";
                 return View("NotFound");
             }
@@ -205,7 +205,7 @@ namespace RockBotPanel.Controllers
 
             if (role == null)
             {
-                _logger.LogError($"role with Id = {roleId} is null");
+                _logger.LogError($"Role with Id = {roleId} is null");
                 ViewBag.ErrorMessage = $"Role with Id = {roleId} cannot be found";
                 return View("NotFound");
             }

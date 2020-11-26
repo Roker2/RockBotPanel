@@ -69,7 +69,7 @@ namespace RockBotPanel.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (chatinfo == null)
             {
-                _logger.LogError("chatinfo is null");
+                _logger.LogError($"chatinfo with ID = {id} is null");
                 return NotFound();
             }
 
@@ -88,7 +88,7 @@ namespace RockBotPanel.Controllers
             TelegramUser user = await userManager.GetUserAsync(User);
             if (user.ChatIds == null)
             {
-                _logger.LogError("chatinfo is null");
+                _logger.LogWarning("ChatIds is empty");
                 return View(new List<Chatinfo>());
             }
             List<string> ids = user.ChatIds.Split("|").ToList();
@@ -105,15 +105,15 @@ namespace RockBotPanel.Controllers
 
             if(!found)
             {
-                ViewBag.ErrorMessage = "Chat " + id.ToString() + " is not added in your chats";
-                _logger.LogError("Chat " + id.ToString() + " is not added in user chats");
+                ViewBag.ErrorMessage = $"Chat {id} is not added in your chats";
+                _logger.LogError($"Chat {id} is not added in your chats");
                 return View("NotFound");
             }
 
             var chatinfo = await context.Chatinfo.FindAsync(id);
             if (chatinfo == null)
             {
-                _logger.LogError("chatinfo is null");
+                _logger.LogError($"chatinfo with ID = {id} is null");
                 return NotFound();
             }
             return View(new ChatinfoEditViewModel(chatinfo));
@@ -130,6 +130,7 @@ namespace RockBotPanel.Controllers
             if (id != chatinfo.Id)
             {
                 _logger.LogError("id and chatinfo.Id are different");
+                _logger.LogDebug($"id = {id}, allusers.Id = {chatinfo.Id}");
                 return NotFound();
             }
 
@@ -171,7 +172,7 @@ namespace RockBotPanel.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (chatinfo == null)
             {
-                _logger.LogError("chatinfo is null");
+                _logger.LogError($"chatinfo with ID = {id} is null");
                 return NotFound();
             }
 

@@ -45,7 +45,7 @@ namespace RockBotPanel.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (allusers == null)
             {
-                _logger.LogError("allusers is null");
+                _logger.LogError($"allusers with ID = {id} is null");
                 return NotFound();
             }
 
@@ -86,7 +86,7 @@ namespace RockBotPanel.Controllers
             var allusers = await _context.Allusers.FindAsync(id);
             if (allusers == null)
             {
-                _logger.LogError("allusers is null");
+                _logger.LogError($"allusers with ID = {id} is null");
                 return NotFound();
             }
             return View(allusers);
@@ -102,6 +102,7 @@ namespace RockBotPanel.Controllers
             if (id != allusers.Id)
             {
                 _logger.LogError("id and allusers.Id are different");
+                _logger.LogDebug($"id = {id}, allusers.Id = {allusers.Id}");
                 return NotFound();
             }
 
@@ -143,7 +144,7 @@ namespace RockBotPanel.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (allusers == null)
             {
-                _logger.LogError("allusers is null");
+                _logger.LogError($"allusers with ID = {id} is null");
                 return NotFound();
             }
 
