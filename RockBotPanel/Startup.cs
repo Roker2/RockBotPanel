@@ -41,13 +41,16 @@ namespace RockBotPanel
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                NLog.LogManager.Configuration.Variables["globalLevel"] = "Debug";
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+                NLog.LogManager.Configuration.Variables["globalLevel"] = "Info";
             }
+            NLog.LogManager.ReconfigExistingLoggers();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
