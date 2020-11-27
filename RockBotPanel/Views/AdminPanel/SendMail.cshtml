@@ -1,0 +1,38 @@
+﻿@model RockBotPanel.ViewModels.AdminPanel.EmailMessageViewModel
+
+@{
+    ViewBag.Title = "Send mail";
+}
+<form method="post">
+    <div class="card">
+        <div class="card-header">
+            <h2>Send mail to users</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <input asp-for="From" class="form-control" placeholder="From">
+                    <span asp-validation-for="From" class="text-danger"></span>
+                </div>
+                <div class="col-sm-10">
+                    <input asp-for="Subject" class="form-control" placeholder="Subject">
+                    <span asp-validation-for="Subject" class="text-danger"></span>
+                </div>
+                <div class="col-sm-10">
+                    <textarea asp-for="Content" class="form-control"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+            </div>
+            @Html.ListBoxFor(x => x.SelectedEmails, Model.UserList, new { size = 10 })
+        </div>
+    </div>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">Send</button>
+            <a asp-action="Index" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
