@@ -40,6 +40,10 @@
                                     @User.Identity.Name
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a class="dropdown-item" asp-controller="AdminPanel" asp-action="Index">Admin panel</a>
+                                    }
                                     <a class="dropdown-item" asp-controller="account" asp-action="AddChatId">Add chat</a>
                                     <a class="dropdown-item" asp-controller="account" asp-action="EditUser">Edit account</a>
                                     <a class="dropdown-item" asp-controller="Chatinfoes" asp-action="Index">My chats</a>
