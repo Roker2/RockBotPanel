@@ -8,6 +8,7 @@ namespace RockBotPanel.Models
     public class EmailMessage
     {
         public List<string> ToAddresses { get; set; } = new List<string>();
+        public string From { get; set; } = "Rock Bot Panel";
         public string Subject { get; set; }
         public string Content { get; set; }
     }

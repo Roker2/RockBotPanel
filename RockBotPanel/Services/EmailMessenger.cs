@@ -52,7 +52,7 @@ namespace RockBotPanel.Services
         public async void SendMsg(Models.EmailMessage msg)
         {
             MimeMessage emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("Rock Bot Panel", _emailConfiguration.SmtpUsername));
+            emailMessage.From.Add(new MailboxAddress(msg.From, _emailConfiguration.SmtpUsername));
             foreach(string address in msg.ToAddresses)
             {
                 emailMessage.To.Add(new MailboxAddress("User", address));
