@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using RockBotPanel.Data;
 using RockBotPanel.Helpers;
 using RockBotPanel.Models;
+using RockBotPanel.Services;
 using RockBotPanel.ViewModels.Users;
 
 namespace RockBotPanel.Controllers
@@ -22,13 +23,16 @@ namespace RockBotPanel.Controllers
         private readonly UserManager<TelegramUser> userManager;
         private readonly d940mhn2jd7mllContext context;
         private readonly ILogger<AccountController> _logger;
+        private readonly ITelegramService _telegramService;
 
         public UsersController(UserManager<TelegramUser> userManager,
             d940mhn2jd7mllContext context,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            ITelegramService telegramService)
         {
             this.userManager = userManager;
             this.context = context;
+            _telegramService = telegramService;
             _logger = logger;
             _logger.LogDebug("Users controller constructor");
         }
@@ -49,7 +53,7 @@ namespace RockBotPanel.Controllers
                 if (user.Chatid == id.Value)
                     filteredUsers.Add(user);
             }
-            ViewBag.ChatName = Helpers.TelegramHelper.GetChatName(id.Value);
+            ViewBag.ChatName = _telegramService.GetChatName(id.Value);
 
             //Get max warns quantuty
             var chatinfo = await context.Chatinfo
@@ -97,8 +101,8 @@ namespace RockBotPanel.Controllers
             bool isAdmin = user.IsAdmin(chatid.Value);
             if (!isAdmin)
             {
-                _logger.LogError($"User is not admin in {TelegramHelper.GetChatName(chatid.Value)}");
-                ViewBag.ErrorMessage = $"You are not admin in {TelegramHelper.GetChatName(chatid.Value)}";
+                _logger.LogError($"User is not admin in {_telegramService.GetChatName(chatid.Value)}");
+                ViewBag.ErrorMessage = $"You are not admin in {_telegramService.GetChatName(chatid.Value)}";
                 return View("NotFound");
             }
             CreateUserViewModel model = new CreateUserViewModel { Chatid = chatid.Value };
@@ -149,8 +153,8 @@ namespace RockBotPanel.Controllers
             bool isAdmin = user.IsAdmin(users.Chatid.Value);
             if (!isAdmin)
             {
-                _logger.LogError($"User is not admin in {TelegramHelper.GetChatName(users.Chatid.Value)}");
-                ViewBag.ErrorMessage = $"You are not admin in {TelegramHelper.GetChatName(users.Chatid.Value)}";
+                _logger.LogError($"User is not admin in {_telegramService.GetChatName(users.Chatid.Value)}");
+                ViewBag.ErrorMessage = $"You are not admin in {_telegramService.GetChatName(users.Chatid.Value)}";
                 return View("NotFound");
             }
             return View(users);
@@ -208,8 +212,8 @@ namespace RockBotPanel.Controllers
             bool isAdmin = user.IsAdmin(users.Chatid.Value);
             if (!isAdmin)
             {
-                _logger.LogError($"User is not admin in {TelegramHelper.GetChatName(users.Chatid.Value)}");
-                ViewBag.ErrorMessage = $"You are not admin in {TelegramHelper.GetChatName(users.Chatid.Value)}";
+                _logger.LogError($"User is not admin in {_telegramService.GetChatName(users.Chatid.Value)}");
+                ViewBag.ErrorMessage = $"You are not admin in {_telegramService.GetChatName(users.Chatid.Value)}";
                 return View("NotFound");
             }
 

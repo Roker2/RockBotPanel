@@ -9,6 +9,7 @@ using RockBotPanel.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.Extensions.Logging;
+using RockBotPanel.Services;
 
 namespace RockBotPanel.Controllers
 {
@@ -20,17 +21,20 @@ namespace RockBotPanel.Controllers
         private readonly SignInManager<TelegramUser> signInManager;
         private readonly d940mhn2jd7mllContext _context;
         private readonly ILogger<AccountController> _logger;
+        private readonly ITelegramService _telegramService;
 
         public AccountController(UserManager<TelegramUser> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<TelegramUser> signInManager,
             d940mhn2jd7mllContext context,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            ITelegramService telegramService)
         {
             _context = context;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
+            _telegramService = telegramService;
             _logger = logger;
             _logger.LogDebug("Account controller constructor");
         }
@@ -273,8 +277,8 @@ namespace RockBotPanel.Controllers
 
             if (!isAdmin)
             {
-                _logger.LogError($"{user.UserName} is not admin in {TelegramHelper.GetChatName(model.ChatId)}");
-                ViewBag.ErrorMessage = $"You are not admin in {TelegramHelper.GetChatName(model.ChatId)}";
+                _logger.LogError($"{user.UserName} is not admin in {_telegramService.GetChatName(model.ChatId)}");
+                ViewBag.ErrorMessage = $"You are not admin in {_telegramService.GetChatName(model.ChatId)}";
                 return View("NotFound");
             }
             else
