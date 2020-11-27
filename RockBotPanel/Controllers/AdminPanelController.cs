@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RockBotPanel.Models;
 using RockBotPanel.Services;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace RockBotPanel.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminPanelController : Controller
     {
         private readonly UserManager<TelegramUser> userManager;
