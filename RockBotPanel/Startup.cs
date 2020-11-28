@@ -41,7 +41,7 @@ namespace RockBotPanel
                 SmtpPassword = Configuration["EmailConfiguration:SmtpPassword"]
             });
 
-            services.AddSingleton<IEmailMessenger, EmailMessenger>();
+            services.AddTransient<IEmailMessenger, EmailMessenger>();
 
             services.AddSignalR();
 
