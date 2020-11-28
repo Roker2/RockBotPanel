@@ -163,6 +163,9 @@ namespace RockBotPanel.Controllers
                 ViewBag.ErrorMessage = $"You are not admin in {_telegramService.GetChatName(users.Chatid.Value)}";
                 return View("NotFound");
             }
+
+            //Add service for page
+            ViewBag.telegramService = _telegramService;
             return View(users);
         }
 

@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Users</h4>
+    <h4>@Html.Raw(ViewBag.telegramService.GetUserName((int)Model.Userid.Value, Model.Chatid.Value))</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
