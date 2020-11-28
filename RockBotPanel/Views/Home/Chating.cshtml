@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<TelegramUser> SignInManager
+@{
+    ViewData["Title"] = "Chating";
+}
+
+<div class="container">
+    <div class="row">&nbsp;</div>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div class="col-4"><input type="text" readonly hidden id="userInput" value="@User.Identity.Name" /></div>
+        <div class="row">
+            <div class="col-2">Message</div>
+            <div class="col-4"><input type="text" id="messageInput" /></div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-6">
+                <input type="button" id="sendButton" value="Send Message" />
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-4"><p><a asp-controller="account" asp-action="login">Login</a> please</p></div>
+    }
+</div>
+<div class="row">
+    <div class="col-12">
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <ul id="messagesList"></ul>
+    </div>
+</div>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>

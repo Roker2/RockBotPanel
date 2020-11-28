@@ -4,17 +4,22 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using RockBotPanel.Hubs;
 using RockBotPanel.Models;
 
 namespace RockBotPanel.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IHubContext<ChatHub> _hubContext;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IHubContext<ChatHub> hubContext,
+            ILogger<HomeController> logger)
         {
+            _hubContext = hubContext;
             _logger = logger;
             _logger.LogDebug("Home controller constructor");
         }
@@ -33,6 +38,11 @@ namespace RockBotPanel.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Chating()
+        {
+            return View();
         }
     }
 }

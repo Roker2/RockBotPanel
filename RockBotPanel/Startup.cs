@@ -43,6 +43,8 @@ namespace RockBotPanel
 
             services.AddSingleton<IEmailMessenger, EmailMessenger>();
 
+            services.AddSignalR();
+
             services.AddControllersWithViews();
         }
 
@@ -75,6 +77,7 @@ namespace RockBotPanel
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<Hubs.ChatHub>("/chathub");
             });
         }
     }
