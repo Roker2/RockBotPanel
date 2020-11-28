@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RockBotPanel.Data;
 using RockBotPanel.Models;
+using RockBotPanel.Services;
 using RockBotPanel.ViewModels.Chatinfoes;
 
 namespace RockBotPanel.Controllers
@@ -18,13 +19,16 @@ namespace RockBotPanel.Controllers
         private readonly UserManager<TelegramUser> userManager;
         private readonly d940mhn2jd7mllContext context;
         private readonly ILogger<AccountController> _logger;
+        private readonly ITelegramService _telegramService;
 
         public ChatinfoesController(UserManager<TelegramUser> userManager,
             d940mhn2jd7mllContext context,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            ITelegramService telegramService)
         {
             this.context = context;
             this.userManager = userManager;
+            _telegramService = telegramService;
             _logger = logger;
             _logger.LogDebug("Chatinfoes controller constructor");
         }
@@ -53,6 +57,9 @@ namespace RockBotPanel.Controllers
             if (filteredChats.Count == 0)
                 _logger.LogWarning("filteredChats is empty");
 
+            //Add service for page
+            ViewBag.telegramService = _telegramService;
+
             return View(filteredChats);
         }
 
@@ -72,6 +79,9 @@ namespace RockBotPanel.Controllers
                 _logger.LogError($"chatinfo with ID = {id} is null");
                 return NotFound();
             }
+
+            //Add service for page
+            ViewBag.telegramService = _telegramService;
 
             return View(chatinfo);
         }
@@ -175,6 +185,9 @@ namespace RockBotPanel.Controllers
                 _logger.LogError($"chatinfo with ID = {id} is null");
                 return NotFound();
             }
+
+            //Add service for page
+            ViewBag.telegramService = _telegramService;
 
             return View(chatinfo);
         }

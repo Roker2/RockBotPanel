@@ -55,10 +55,5 @@ namespace RockBotPanel.Models
             set => _Rules = value;
         }
         public string DisabledCommands { get; set; }
-
-        public string GetChatName()
-        {
-            return TelegramHelper.GetChatName(Id);
-        }
     }
 }
