@@ -1,0 +1,27 @@
+﻿@model List<TelegramUser>
+@{
+    ViewBag.Title = "Site Users";
+}
+
+<h1>Site Users</h1>
+
+@if (Model.Any())
+{
+    foreach (var user in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                User Id : @user.Id
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">@user.UserName</h5>
+            </div>
+            <div class="card-footer">
+                <a asp-action="EditUser" asp-controller="AdminPanel" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
+                <form method="post" asp-action="DeleteUser" asp-controller="AdminPanel" asp-route-id="@user.Id">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    }
+}
