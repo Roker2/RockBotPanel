@@ -98,7 +98,7 @@ namespace RockBotPanel.Controllers
             }
 
             var user = userManager.GetUserAsync(User).Result;
-            bool isAdmin = user.IsAdmin(chatid.Value);
+            bool isAdmin = _telegramService.IsAdmin(chatid.Value, user.TelegramId);
             if (!isAdmin)
             {
                 _logger.LogError($"User is not admin in {_telegramService.GetChatName(chatid.Value)}");
@@ -150,7 +150,7 @@ namespace RockBotPanel.Controllers
             }
 
             var user = await userManager.GetUserAsync(User);
-            bool isAdmin = user.IsAdmin(users.Chatid.Value);
+            bool isAdmin = _telegramService.IsAdmin(users.Chatid.Value, user.TelegramId);
             if (!isAdmin)
             {
                 _logger.LogError($"User is not admin in {_telegramService.GetChatName(users.Chatid.Value)}");
@@ -209,7 +209,7 @@ namespace RockBotPanel.Controllers
             }
 
             var user = await userManager.GetUserAsync(User);
-            bool isAdmin = user.IsAdmin(users.Chatid.Value);
+            bool isAdmin = _telegramService.IsAdmin(users.Chatid.Value, user.TelegramId);
             if (!isAdmin)
             {
                 _logger.LogError($"User is not admin in {_telegramService.GetChatName(users.Chatid.Value)}");
