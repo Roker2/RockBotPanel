@@ -63,6 +63,9 @@ namespace RockBotPanel.Controllers
             if(filteredUsers.Count == 0)
                 _logger.LogWarning("filteredUsers is empty");
 
+            //Add service for page
+            ViewBag.telegramService = _telegramService;
+
             ViewBag.Chatid = id;
             return View(filteredUsers);
         }
@@ -83,6 +86,9 @@ namespace RockBotPanel.Controllers
                 _logger.LogError($"users with ID = {id} is null");
                 return NotFound();
             }
+
+            //Add service for page
+            ViewBag.telegramService = _telegramService;
 
             return View(users);
         }
@@ -216,6 +222,9 @@ namespace RockBotPanel.Controllers
                 ViewBag.ErrorMessage = $"You are not admin in {_telegramService.GetChatName(users.Chatid.Value)}";
                 return View("NotFound");
             }
+
+            //Add service for page
+            ViewBag.telegramService = _telegramService;
 
             return View(users);
         }
