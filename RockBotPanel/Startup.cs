@@ -47,7 +47,7 @@ namespace RockBotPanel
 
             services.AddSingleton<ITelegramToken>(new TelegramToken(Configuration.GetConnectionString("TelegramBotToken")));
 
-            services.AddSingleton<ITelegramService, TelegramService>();
+            services.AddScoped<ITelegramService, TelegramService>();
 
             services.AddControllersWithViews();
         }
