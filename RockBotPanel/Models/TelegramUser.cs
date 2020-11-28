@@ -25,7 +25,5 @@ namespace RockBotPanel.Models
             TelegramHelper.SendString(TelegramId, "Validation code: " + code);
             LastValidationCode = code;
         }
-
-        public bool IsAdmin(long ChatID) => TelegramHelper.IsAdmin(ChatID, TelegramId);
     }
 }
