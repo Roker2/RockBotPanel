@@ -49,12 +49,21 @@ namespace RockBotPanel.Controllers
         [HttpPost]
         public IActionResult SendMail(EmailMessageViewModel model)
         {
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
             EmailMessage msg = new EmailMessage
             {
                 From = model.From,
                 Subject = model.Subject,
                 Content = model.Content
             };
+            if(model.SelectedEmails == null)
+            {
+                ModelState.AddModelError("", "Select emails");
+                return View(model);
+            }
             foreach(var email in model.SelectedEmails)
             {
                 msg.ToAddresses.Add(email);
