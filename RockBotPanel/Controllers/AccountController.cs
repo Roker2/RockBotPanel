@@ -265,7 +265,7 @@ namespace RockBotPanel.Controllers
 
             try
             {
-                isAdmin = user.IsAdmin(model.ChatId);
+                isAdmin = _telegramService.IsAdmin(model.ChatId, user.TelegramId);
             }
             catch(Exception e)
             {
