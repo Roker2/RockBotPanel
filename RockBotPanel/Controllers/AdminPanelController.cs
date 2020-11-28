@@ -15,10 +15,10 @@ namespace RockBotPanel.Controllers
     public class AdminPanelController : Controller
     {
         private readonly UserManager<TelegramUser> userManager;
-        private readonly IEmailMessenger _emailMessenger;
+        private readonly IEmailMessanger _emailMessenger;
 
         public AdminPanelController(UserManager<TelegramUser> userManager,
-            IEmailMessenger emailMessenger)
+            IEmailMessanger emailMessenger)
         {
             this.userManager = userManager;
             _emailMessenger = emailMessenger;

@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace RockBotPanel.Services
 {
-    public interface IEmailMessenger
+    public interface IEmailMessanger
     {
         void SendMsg(Models.EmailMessage msg);
     }
-    public class EmailMessenger : IEmailMessenger
+    public class EmailMessanger : IEmailMessanger
     {
         private readonly IEmailConfiguration _emailConfiguration;
         private readonly SmtpClient smtpClient = new SmtpClient();
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        public EmailMessenger(IEmailConfiguration emailConfiguration)
+        public EmailMessanger(IEmailConfiguration emailConfiguration)
         {
             _emailConfiguration = emailConfiguration;
             try
@@ -44,7 +44,7 @@ namespace RockBotPanel.Services
                 LogAuthenticationConfiguration();
             }
         }
-        ~EmailMessenger()
+        ~EmailMessanger()
         {
             smtpClient.Disconnect(true);
         }
