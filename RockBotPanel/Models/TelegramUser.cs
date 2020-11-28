@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using RockBotPanel.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,13 +16,5 @@ namespace RockBotPanel.Models
         public String LastValidationCode { get; set; }
 
         public bool CheckCode(string code) => LastValidationCode == code;
-
-        //save it after sending code
-        public void GenerateValidationCode()
-        {
-            string code = RandomHelper.GenerateRandomPassword(10);
-            TelegramHelper.SendString(TelegramId, "Validation code: " + code);
-            LastValidationCode = code;
-        }
     }
 }
