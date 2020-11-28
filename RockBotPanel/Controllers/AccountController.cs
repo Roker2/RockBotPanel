@@ -148,11 +148,10 @@ namespace RockBotPanel.Controllers
                 return View("NotFound");
             }
 
-            // GetClaimsAsync retunrs the list of user Claims
-            var userClaims = await userManager.GetClaimsAsync(user);
-            // GetRolesAsync returns the list of user Roles
-            var userRoles = await userManager.GetRolesAsync(user);
-            user.GenerateValidationCode();
+            //Generate, send and save validation code
+            string code = RandomHelper.GenerateRandomPassword(10);
+            _telegramService.SendString(user.TelegramId, "Validation code: " + code);
+            user.LastValidationCode = code;
             var result = await userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
@@ -226,8 +225,10 @@ namespace RockBotPanel.Controllers
                 return View("NotFound");
             }
 
-
-            user.GenerateValidationCode();
+            //Generate, send and save validation code
+            string code = RandomHelper.GenerateRandomPassword(10);
+            _telegramService.SendString(user.TelegramId, "Validation code: " + code);
+            user.LastValidationCode = code;
             var result = await userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
