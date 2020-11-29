@@ -158,8 +158,7 @@ namespace RockBotPanel.Controllers
             {
                 // Need to set MultipleActiveResultSets=true to connection string
                 // If the user is in this role, add the username to
-                // Users property of EditRoleViewModel. This model
-                // object is then passed to the view for display
+                // Users property of Details
                 if (await userManager.IsInRoleAsync(user, role.Name))
                 {
                     model.Users.Add(user.UserName);
