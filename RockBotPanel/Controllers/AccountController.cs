@@ -39,6 +39,24 @@ namespace RockBotPanel.Controllers
             _logger.LogDebug("Account controller constructor");
         }
 
+        async Task<IActionResult> LoginCorrupt(LoginViewModel model, TelegramUser user)
+        {
+            //Generate, send and save validation code
+            string code = RandomHelper.GenerateRandomPassword(10);
+            _telegramService.SendString(user.TelegramId, "Validation code: " + code);
+            user.LastValidationCode = code;
+            var result = await userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                _logger.LogError("Can not save validation code");
+                ModelState.AddModelError("", "Can not save validation code");
+                return View("NotFound");
+            }
+            ViewBag.ShowFullView = true;
+            return View(model);
+        }
+
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Register()
@@ -100,17 +118,65 @@ namespace RockBotPanel.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            //don't show validation code
+            ViewBag.ShowFullView = false;
             return View();
         }
 
+        /*
+         * In the first time show only Email
+         * In next times show full view, if email is right
+         */
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            TelegramUser user;
             if (ModelState.IsValid)
             {
+                user = await userManager.FindByEmailAsync(model.Email);
+                if(user == null)
+                {
+                    _logger.LogError($"There is no such user, {model.Email}");
+                    ModelState.AddModelError("", "There is no such user with this Email");
+                    ViewBag.ShowFullView = false;
+                    return View(model);
+                }
+                //send validation code
+                if(model.ValidationCode == null && model.Password == null)
+                {
+                    //Generate, send and save validation code
+                    string code = RandomHelper.GenerateRandomPassword(10);
+                    _telegramService.SendString(user.TelegramId, "Validation code: " + code);
+                    user.LastValidationCode = code;
+                    var result = await userManager.UpdateAsync(user);
+
+                    if (!result.Succeeded)
+                    {
+                        _logger.LogCritical("Can not save validation code");
+                        ModelState.AddModelError("", "Can not save validation code");
+                        return View("NotFound");
+                    }
+                    //Okay, show validation code and password
+                    ViewBag.ShowFullView = true;
+                    return View(model);
+                }
                 try
                 {
+                    //if password is null, site will show "Password is empty"
+                    if (model.Password == null)
+                    {
+                        _logger.LogError("User didn't write password");
+                        ModelState.AddModelError("", "Password is empty");
+                        return await LoginCorrupt(model, user);
+                    }
+                    //check validation code
+                    if (!user.CheckCode(model.ValidationCode))
+                    {
+                        _logger.LogError("Validatin code is not correct");
+                        ModelState.AddModelError("", "Validatin code is not correct");
+                        return await LoginCorrupt(model, user);
+                    }
                     var result = await signInManager.PasswordSignInAsync(
                         model.Email, model.Password, model.RememberMe, false);
 
@@ -131,6 +197,16 @@ namespace RockBotPanel.Controllers
             }
 
             _logger.LogInformation("LoginViewModel model is invalid");
+            //if Email is null, show full view
+            if(model.Email != null)
+            //if(ModelState.IsValid)
+            {
+                user = await userManager.FindByEmailAsync(model.Email);
+                ViewBag.ShowFullView = true;
+                return await LoginCorrupt(model, user);
+            }
+            //if Email is not correct, don't show full view
+            ViewBag.ShowFullView = false;
             return View(model);
         }
 
