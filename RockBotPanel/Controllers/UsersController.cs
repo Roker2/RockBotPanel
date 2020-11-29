@@ -43,7 +43,8 @@ namespace RockBotPanel.Controllers
             if (id == null)
             {
                 _logger.LogError("id is null");
-                return NotFound();
+                ViewBag.ErrorMessage = "Id is empty";
+                return View("SiteError");
             }
 
             List<Users> allUsers = await context.Users.ToListAsync();
@@ -76,7 +77,8 @@ namespace RockBotPanel.Controllers
             if (id == null)
             {
                 _logger.LogError("id is null");
-                return NotFound();
+                ViewBag.ErrorMessage = "Id is empty";
+                return View("SiteError");
             }
 
             var users = await context.Users
@@ -84,7 +86,8 @@ namespace RockBotPanel.Controllers
             if (users == null)
             {
                 _logger.LogError($"users with ID = {id} is null");
-                return NotFound();
+                ViewBag.ErrorMessage = $"User with ID = {id} cannot be found";
+                return View("NotFound");
             }
 
             //Add service for page
@@ -100,16 +103,17 @@ namespace RockBotPanel.Controllers
             if (chatid == null)
             {
                 _logger.LogError("id is null");
-                return NotFound();
+                ViewBag.ErrorMessage = "Id is empty";
+                return View("SiteError");
             }
 
             var user = userManager.GetUserAsync(User).Result;
             bool isAdmin = _telegramService.IsAdmin(chatid.Value, user.TelegramId);
             if (!isAdmin)
             {
-                _logger.LogError($"User is not admin in {_telegramService.GetChatName(chatid.Value)}");
+                _logger.LogInformation($"User is not admin in {_telegramService.GetChatName(chatid.Value)}");
                 ViewBag.ErrorMessage = $"You are not admin in {_telegramService.GetChatName(chatid.Value)}";
-                return View("NotFound");
+                return View("SiteError");
             }
             CreateUserViewModel model = new CreateUserViewModel { Chatid = chatid.Value };
 
@@ -145,23 +149,25 @@ namespace RockBotPanel.Controllers
             if (id == null)
             {
                 _logger.LogError("id is null");
-                return NotFound();
+                ViewBag.ErrorMessage = "Id is empty";
+                return View("SiteError");
             }
 
             var users = await context.Users.FindAsync(id);
             if (users == null)
             {
                 _logger.LogError($"users with ID = {id} is null");
-                return NotFound();
+                ViewBag.ErrorMessage = $"User with ID = {id} cannot be found";
+                return View("NotFound");
             }
 
             var user = await userManager.GetUserAsync(User);
             bool isAdmin = _telegramService.IsAdmin(users.Chatid.Value, user.TelegramId);
             if (!isAdmin)
             {
-                _logger.LogError($"User is not admin in {_telegramService.GetChatName(users.Chatid.Value)}");
+                _logger.LogInformation($"User is not admin in {_telegramService.GetChatName(users.Chatid.Value)}");
                 ViewBag.ErrorMessage = $"You are not admin in {_telegramService.GetChatName(users.Chatid.Value)}";
-                return View("NotFound");
+                return View("SiteError");
             }
 
             //Add service for page
@@ -187,8 +193,8 @@ namespace RockBotPanel.Controllers
                 {
                     if (!UsersExists(users.Id))
                     {
-                        ViewBag.ErrorMessage = "User does not exist";
-                        _logger.LogError("User does not exist");
+                        ViewBag.ErrorMessage = $"User with ID = {users.Id} does not exist in database";
+                        _logger.LogError($"User with ID = {users.Id} does not exist in database");
                         return View("NotFound");
                     }
                     else
@@ -207,23 +213,26 @@ namespace RockBotPanel.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                ViewBag.ErrorMessage = "Id is empty";
+                return View("SiteError");
             }
 
             var users = await context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (users == null)
             {
-                return NotFound();
+                _logger.LogError($"users with ID = {id} is null");
+                ViewBag.ErrorMessage = $"User with ID = {id} cannot be found";
+                return View("NotFound");
             }
 
             var user = await userManager.GetUserAsync(User);
             bool isAdmin = _telegramService.IsAdmin(users.Chatid.Value, user.TelegramId);
             if (!isAdmin)
             {
-                _logger.LogError($"User is not admin in {_telegramService.GetChatName(users.Chatid.Value)}");
+                _logger.LogInformation($"User is not admin in {_telegramService.GetChatName(users.Chatid.Value)}");
                 ViewBag.ErrorMessage = $"You are not admin in {_telegramService.GetChatName(users.Chatid.Value)}";
-                return View("NotFound");
+                return View("SiteError");
             }
 
             //Add service for page
