@@ -1,31 +1,26 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RockBotPanel.Models;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace RockBotPanel.Data
 {
     public partial class d940mhn2jd7mllContext : DbContext
     {
-        public d940mhn2jd7mllContext()
-        {
-        }
-
         public d940mhn2jd7mllContext(DbContextOptions<d940mhn2jd7mllContext> options)
             : base(options)
         {
+            ConnectionString = Database.GetDbConnection().ConnectionString;
         }
 
         public virtual DbSet<Allusers> Allusers { get; set; }
         public virtual DbSet<Chatinfo> Chatinfo { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        private string ConnectionString { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseNpgsql("connect");
+                optionsBuilder.UseNpgsql(ConnectionString);
             }
         }
 
