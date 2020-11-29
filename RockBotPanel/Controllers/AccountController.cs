@@ -51,7 +51,7 @@ namespace RockBotPanel.Controllers
             {
                 _logger.LogError("Can not save validation code");
                 ModelState.AddModelError("", "Can not save validation code");
-                return View("NotFound");
+                return View("SiteError");
             }
             ViewBag.ShowFullView = true;
             return View(model);
@@ -155,7 +155,7 @@ namespace RockBotPanel.Controllers
                     {
                         _logger.LogCritical("Can not save validation code");
                         ModelState.AddModelError("", "Can not save validation code");
-                        return View("NotFound");
+                        return View("SiteError");
                     }
                     //Okay, show validation code and password
                     ViewBag.ShowFullView = true;
@@ -192,7 +192,7 @@ namespace RockBotPanel.Controllers
                 {
                     _logger.LogError(e.Message);
                     ViewBag.ErrorMessage = e;
-                    return View("NotFound");
+                    return View("SiteError");
                 }
             }
 
@@ -215,12 +215,10 @@ namespace RockBotPanel.Controllers
         {
             var user = await userManager.GetUserAsync(User);
 
-            string id = user.Id;
-
             if (user == null)
             {
-                _logger.LogError($"User with Id = {id} cannot be found");
-                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                _logger.LogError($"User cannot be found");
+                ViewBag.ErrorMessage = $"User cannot be found";
                 return View("NotFound");
             }
 
@@ -234,7 +232,7 @@ namespace RockBotPanel.Controllers
             {
                 _logger.LogError("Can not save validation code");
                 ViewBag.ErrorMessage = "Can not save validation code";
-                return View("NotFound");
+                return View("SiteError");
             }
 
             var model = new EditUserViewModel
@@ -292,12 +290,10 @@ namespace RockBotPanel.Controllers
         {
             var user = await userManager.GetUserAsync(User);
 
-            string id = user.Id;
-
             if (user == null)
             {
-                _logger.LogError($"User with Id = {id} cannot be found");
-                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                _logger.LogError($"User cannot be found");
+                ViewBag.ErrorMessage = $"User cannot be found";
                 return View("NotFound");
             }
 
@@ -311,7 +307,7 @@ namespace RockBotPanel.Controllers
             {
                 _logger.LogError("Can not save validation code");
                 ViewBag.ErrorMessage = "Can not save validation code";
-                return View("NotFound");
+                return View("SiteError");
             }
 
             var model = new AddChatIdViewModel();
@@ -356,7 +352,7 @@ namespace RockBotPanel.Controllers
             {
                 _logger.LogError($"{user.UserName} is not admin in {_telegramService.GetChatName(model.ChatId)}");
                 ViewBag.ErrorMessage = $"You are not admin in {_telegramService.GetChatName(model.ChatId)}";
-                return View("NotFound");
+                return View("SiteError");
             }
             else
             {
