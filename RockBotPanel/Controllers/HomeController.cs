@@ -13,13 +13,11 @@ namespace RockBotPanel.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IHubContext<ChatHub> _hubContext;
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(IHubContext<ChatHub> hubContext,
             ILogger<HomeController> logger)
         {
-            _hubContext = hubContext;
             _logger = logger;
             _logger.LogDebug("Home controller constructor");
         }
