@@ -231,7 +231,7 @@ namespace RockBotPanel.Controllers
                 if (!result.Succeeded)
                 {
                     ViewBag.ErrorMessage = $"Can not save role for {item.UserName}";
-                    return View("NotFound");
+                    return View("SiteError");
                 }
             }
 
