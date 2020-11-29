@@ -107,6 +107,7 @@ namespace RockBotPanel.Controllers
 
                 foreach (var error in result.Errors)
                 {
+                    _logger.LogError(error.Description);
                     ModelState.AddModelError("", error.Description);
                 }
 
@@ -184,6 +185,7 @@ namespace RockBotPanel.Controllers
 
                 foreach (var error in result.Errors)
                 {
+                    _logger.LogError(error.Description);
                     ModelState.AddModelError("", error.Description);
                 }
 
