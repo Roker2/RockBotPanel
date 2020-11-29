@@ -1,0 +1,19 @@
+﻿@model RockBotPanel.ViewModels.Account.DeleteUserViewModel
+@{
+    ViewData["Title"] = "Delete account";
+}
+
+<h1>Delete account</h1>
+
+<h3>Are you sure you want to delete account?</h3>
+<form class="mt-3" asp-action="DeleteUser">
+    <div class="form-group row">
+        <label asp-for="ValidationCode" class="col-sm-2 col-form-label">Validation code</label>
+        <div class="col-sm-10">
+            <input asp-for="ValidationCode" class="form-control" />
+            <span asp-validation-for="ValidationCode" class="text-danger"></span>
+        </div>
+    </div>
+    <input type="submit" value="Delete" class="btn btn-danger" /> |
+    <a asp-action="EditUser">Back to editing</a>
+</form>

@@ -286,6 +286,85 @@ namespace RockBotPanel.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> DeleteUser()
+        {
+            TelegramUser user = await userManager.GetUserAsync(User);
+            //Generate, send and save validation code
+            string code = RandomHelper.GenerateRandomPassword(10);
+            _telegramService.SendString(user.TelegramId, "Validation code: " + code);
+            user.LastValidationCode = code;
+            var result = await userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                _logger.LogError("Can not save validation code");
+                ViewBag.ErrorMessage = "Can not save validation code";
+                return View("SiteError");
+            }
+
+            return View(new DeleteUserViewModel());
+        }
+
+        //code is validation code
+        [HttpPost, ActionName("DeleteUser")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(DeleteUserViewModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            TelegramUser user = await userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = "User cannot be found and delete account";
+                _logger.LogError("User cannot be found and delete account");
+                return View("NotFound");
+            }
+            else
+            {
+                if(!user.CheckCode(model.ValidationCode))
+                {
+                    _logger.LogError($"Bad code, {user.UserName} wrote: {model.ValidationCode}");
+                    ModelState.AddModelError("ValidationCode", $"Bad code, you wrote: {model.ValidationCode}");
+
+                    //Regenerate, send and save validation code
+                    string code = RandomHelper.GenerateRandomPassword(10);
+                    _telegramService.SendString(user.TelegramId, "Validation code: " + code);
+                    user.LastValidationCode = code;
+                    IdentityResult identityResult = await userManager.UpdateAsync(user);
+
+                    if (!identityResult.Succeeded)
+                    {
+                        _logger.LogError("Can not save validation code");
+                        ViewBag.ErrorMessage = "Can not save validation code";
+                        return View("SiteError");
+                    }
+
+                    return View(model);
+                }
+                //logout and delete
+                await signInManager.SignOutAsync();
+                var result = await userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("index", "home");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    _logger.LogError(error.Description);
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View("UsersList");
+            }
+        }
+
+        [HttpGet]
         public async Task<IActionResult> AddChatId()
         {
             var user = await userManager.GetUserAsync(User);
