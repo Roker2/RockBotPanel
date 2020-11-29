@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using RockBotPanel.Hubs;
 using RockBotPanel.Models;
 
 namespace RockBotPanel.Controllers
@@ -15,8 +9,7 @@ namespace RockBotPanel.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IHubContext<ChatHub> hubContext,
-            ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
             _logger.LogDebug("Home controller constructor");
