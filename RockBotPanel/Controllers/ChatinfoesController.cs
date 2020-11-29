@@ -69,7 +69,8 @@ namespace RockBotPanel.Controllers
             if (id == null)
             {
                 _logger.LogError("id is null");
-                return NotFound();
+                ViewBag.ErrorMessage = "Id is empty";
+                return View("SiteError");
             }
 
             var chatinfo = await context.Chatinfo
@@ -77,7 +78,8 @@ namespace RockBotPanel.Controllers
             if (chatinfo == null)
             {
                 _logger.LogError($"chatinfo with ID = {id} is null");
-                return NotFound();
+                ViewBag.ErrorMessage = $"Chat with ID = {id} cannot be found";
+                return View("NotFound");
             }
 
             //Add service for page
@@ -92,7 +94,8 @@ namespace RockBotPanel.Controllers
             if (id == null)
             {
                 _logger.LogError("id is null");
-                return NotFound();
+                ViewBag.ErrorMessage = "Id is empty";
+                return View("SiteError");
             }
 
             TelegramUser user = await userManager.GetUserAsync(User);
@@ -124,7 +127,8 @@ namespace RockBotPanel.Controllers
             if (chatinfo == null)
             {
                 _logger.LogError($"chatinfo with ID = {id} is null");
-                return NotFound();
+                ViewBag.ErrorMessage = $"Chat with ID = {id} cannot be found";
+                return View("NotFound");
             }
             return View(new ChatinfoEditViewModel(chatinfo));
         }
@@ -134,16 +138,9 @@ namespace RockBotPanel.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, ChatinfoEditViewModel model)
+        public async Task<IActionResult> Edit(ChatinfoEditViewModel model)
         {
             Chatinfo chatinfo = model.ToChatinfo();
-            if (id != chatinfo.Id)
-            {
-                _logger.LogError("id and chatinfo.Id are different");
-                _logger.LogDebug($"id = {id}, allusers.Id = {chatinfo.Id}");
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
@@ -156,7 +153,8 @@ namespace RockBotPanel.Controllers
                     if (!ChatinfoExists(chatinfo.Id))
                     {
                         _logger.LogError($"chatinfo {chatinfo.Id} does not exist");
-                        return NotFound();
+                        ViewBag.ErrorMessage = $"Chat with ID = {chatinfo.Id} cannot be found";
+                        return View("NotFound");
                     }
                     else
                     {
@@ -183,7 +181,8 @@ namespace RockBotPanel.Controllers
             if (chatinfo == null)
             {
                 _logger.LogError($"chatinfo with ID = {id} is null");
-                return NotFound();
+                ViewBag.ErrorMessage = $"Chat with ID = {id} cannot be found";
+                return View("NotFound");
             }
 
             //Add service for page
