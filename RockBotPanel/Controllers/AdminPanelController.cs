@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RockBotPanel.Models;
 using RockBotPanel.Services;
 using RockBotPanel.ViewModels.AdminPanel;
@@ -16,12 +17,16 @@ namespace RockBotPanel.Controllers
     {
         private readonly UserManager<TelegramUser> userManager;
         private readonly IEmailMessanger _emailMessenger;
+        private readonly ILogger<AdminPanelController> _logger;
 
         public AdminPanelController(UserManager<TelegramUser> userManager,
-            IEmailMessanger emailMessenger)
+            IEmailMessanger emailMessenger,
+            ILogger<AdminPanelController> logger)
         {
             this.userManager = userManager;
             _emailMessenger = emailMessenger;
+            _logger = logger;
+            _logger.LogDebug("Admin Panel controller constructor");
         }
         public IActionResult Index()
         {
@@ -61,6 +66,7 @@ namespace RockBotPanel.Controllers
             };
             if(model.SelectedEmails == null)
             {
+                _logger.LogError("User didn't choose emails");
                 ModelState.AddModelError("", "Select emails");
                 return View(model);
             }
@@ -87,6 +93,7 @@ namespace RockBotPanel.Controllers
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                _logger.LogError($"User with Id = {id} cannot be found");
                 return View("NotFound");
             }
             else
@@ -116,6 +123,7 @@ namespace RockBotPanel.Controllers
             {
                 //_logger.LogError($"User with Id = {id} cannot be found");
                 ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                _logger.LogError($"User with Id = {id} cannot be found");
                 return View("NotFound");
             }
 
@@ -151,7 +159,7 @@ namespace RockBotPanel.Controllers
 
             if (user == null)
             {
-                //_logger.LogError($"User with Id = {model.Id} cannot be found");
+                _logger.LogError($"User with Id = {model.Id} cannot be found");
                 ViewBag.ErrorMessage = $"User with Id = {model.Id} cannot be found";
                 return View("NotFound");
             }
