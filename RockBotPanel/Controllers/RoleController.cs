@@ -147,7 +147,7 @@ namespace RockBotPanel.Controllers
                 return View("NotFound");
             }
 
-            var model = new Details
+            var model = new DetailsRoleViewModel
             {
                 Id = role.Id,
                 RoleName = role.Name
@@ -158,7 +158,7 @@ namespace RockBotPanel.Controllers
             {
                 // Need to set MultipleActiveResultSets=true to connection string
                 // If the user is in this role, add the username to
-                // Users property of Details
+                // Users property of DetailsRoleViewModel
                 if (await userManager.IsInRoleAsync(user, role.Name))
                 {
                     model.Users.Add(user.UserName);
@@ -242,7 +242,7 @@ namespace RockBotPanel.Controllers
         {
             IdentityRole role = await roleManager.FindByIdAsync(id);
 
-            var model = new Details
+            var model = new DetailsRoleViewModel
             {
                 Id = role.Id,
                 RoleName = role.Name
@@ -252,7 +252,7 @@ namespace RockBotPanel.Controllers
             {
                 // Need to set MultipleActiveResultSets=true to connection string
                 // If the user is in this role, add the username to
-                // Users property of Details
+                // Users property of DetailsRoleViewModel
                 if (await userManager.IsInRoleAsync(user, role.Name))
                 {
                     model.Users.Add(user.UserName);
@@ -263,7 +263,7 @@ namespace RockBotPanel.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Details model)
+        public async Task<IActionResult> Delete(DetailsRoleViewModel model)
         {
             var role = await roleManager.FindByIdAsync(model.Id);
             if(role == null)

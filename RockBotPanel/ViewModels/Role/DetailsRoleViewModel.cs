@@ -2,7 +2,7 @@
 
 namespace RockBotPanel.ViewModels.Role
 {
-    public class Details
+    public class DetailsRoleViewModel
     {
         public string Id { get; set; }
         public string RoleName { get; set; }
