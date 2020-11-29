@@ -38,7 +38,8 @@ namespace RockBotPanel.Controllers
             if (id == null)
             {
                 _logger.LogError("id is null");
-                return NotFound();
+                ViewBag.ErrorMessage = "Id is empty";
+                return View("SiteError");
             }
 
             var allusers = await _context.Allusers
@@ -46,7 +47,8 @@ namespace RockBotPanel.Controllers
             if (allusers == null)
             {
                 _logger.LogError($"allusers with ID = {id} is null");
-                return NotFound();
+                ViewBag.ErrorMessage = $"User with ID = {id} cannot be found";
+                return View("NotFound");
             }
 
             return View(allusers);
@@ -80,14 +82,16 @@ namespace RockBotPanel.Controllers
             if (id == null)
             {
                 _logger.LogError("id is null");
-                return NotFound();
+                ViewBag.ErrorMessage = "Id is empty";
+                return View("SiteError");
             }
 
             var allusers = await _context.Allusers.FindAsync(id);
             if (allusers == null)
             {
                 _logger.LogError($"allusers with ID = {id} is null");
-                return NotFound();
+                ViewBag.ErrorMessage = $"User with ID = {id} cannot be found";
+                return View("NotFound");
             }
             return View(allusers);
         }
@@ -97,15 +101,8 @@ namespace RockBotPanel.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Username")] Allusers allusers)
+        public async Task<IActionResult> Edit([Bind("Id,Username")] Allusers allusers)
         {
-            if (id != allusers.Id)
-            {
-                _logger.LogError("id and allusers.Id are different");
-                _logger.LogDebug($"id = {id}, allusers.Id = {allusers.Id}");
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
@@ -118,7 +115,8 @@ namespace RockBotPanel.Controllers
                     if (!AllusersExists(allusers.Id))
                     {
                         _logger.LogError($"allusers {allusers.Id} does not exist");
-                        return NotFound();
+                        ViewBag.ErrorMessage = $"User with ID = {allusers.Id} cannot be found";
+                        return View("NotFound");
                     }
                     else
                     {
@@ -137,7 +135,8 @@ namespace RockBotPanel.Controllers
             if (id == null)
             {
                 _logger.LogError("id is null");
-                return NotFound();
+                ViewBag.ErrorMessage = "Id is empty";
+                return View("SiteError");
             }
 
             var allusers = await _context.Allusers
@@ -145,7 +144,8 @@ namespace RockBotPanel.Controllers
             if (allusers == null)
             {
                 _logger.LogError($"allusers with ID = {id} is null");
-                return NotFound();
+                ViewBag.ErrorMessage = $"User with ID = {allusers.Id} cannot be found";
+                return View("NotFound");
             }
 
             return View(allusers);
