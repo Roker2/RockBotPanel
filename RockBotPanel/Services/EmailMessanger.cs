@@ -44,10 +44,6 @@ namespace RockBotPanel.Services
                 LogAuthenticationConfiguration();
             }
         }
-        ~EmailMessanger()
-        {
-            smtpClient.Disconnect(true);
-        }
 
         public async void SendMsg(Models.EmailMessage msg)
         {
