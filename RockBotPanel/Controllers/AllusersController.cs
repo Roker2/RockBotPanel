@@ -16,10 +16,10 @@ namespace RockBotPanel.Controllers
     public class AllusersController : Controller
     {
         private readonly d940mhn2jd7mllContext _context;
-        private readonly ILogger<AccountController> _logger;
+        private readonly ILogger<AllusersController> _logger;
 
         public AllusersController(d940mhn2jd7mllContext context,
-            ILogger<AccountController> logger)
+            ILogger<AllusersController> logger)
         {
             _context = context;
             _logger = logger;
