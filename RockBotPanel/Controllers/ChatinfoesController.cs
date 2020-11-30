@@ -41,14 +41,12 @@ namespace RockBotPanel.Controllers
             {
                 return View(new List<Chatinfo>());
             }
-            List<string> ids = user.ChatIds.Split("|").ToList();
             List<Chatinfo> chats = await context.Chatinfo.ToListAsync();
             List<Chatinfo> filteredChats = new List<Chatinfo>();
 
             foreach(Chatinfo chat in chats)
             {
-                string chatId = chat.Id.ToString();
-                if (ids.Find(x => x == chatId) != null)
+                if (_telegramService.IsAdmin(chat.Id, user.TelegramId))
                 {
                     filteredChats.Add(chat);
                 }
@@ -99,28 +97,12 @@ namespace RockBotPanel.Controllers
             }
 
             TelegramUser user = await userManager.GetUserAsync(User);
-            if (user.ChatIds == null)
-            {
-                _logger.LogWarning("ChatIds is empty");
-                return View(new List<Chatinfo>());
-            }
-            List<string> ids = user.ChatIds.Split("|").ToList();
-            bool found = false;
 
-            foreach (string userChatsId in ids)
+            if (!_telegramService.IsAdmin(id.Value, user.TelegramId))
             {
-                if(userChatsId == id.ToString())
-                {
-                    found = true;
-                    break;
-                }
-            }
-
-            if(!found)
-            {
-                ViewBag.ErrorMessage = $"Chat {id} is not added in your chats";
-                _logger.LogError($"Chat {id} is not added in your chats");
-                return View("NotFound");
+                _logger.LogInformation($"User is not admin in {_telegramService.GetChatName(id.Value)}");
+                ViewBag.ErrorMessage = $"You are not admin in {_telegramService.GetChatName(id.Value)}";
+                return View("SiteError");
             }
 
             var chatinfo = await context.Chatinfo.FindAsync(id);
