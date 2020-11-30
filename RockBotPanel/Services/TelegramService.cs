@@ -52,7 +52,17 @@ namespace RockBotPanel.Services
 
         public bool IsAdmin(long ChatID, int UserID)
         {
-            ChatMember[] chatAdmins = Bot.GetChatAdministratorsAsync(ChatID).Result;
+            ChatMember[] chatAdmins;
+            try
+            {
+                chatAdmins = Bot.GetChatAdministratorsAsync(ChatID).Result;
+            }
+            catch(AggregateException e)
+            {
+                logger.Info($"Bot cannot find chat {ChatID}");
+                logger.Info(e.Message);
+                return false;
+            }
             foreach (ChatMember admin in chatAdmins)
             {
                 if (admin.User.Id == UserID)
