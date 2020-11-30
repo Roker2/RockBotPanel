@@ -10,6 +10,10 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.Extensions.Logging;
 using RockBotPanel.Services;
+using System.Linq;
+using System.Collections.Generic;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace RockBotPanel.Controllers
 {
@@ -22,19 +26,22 @@ namespace RockBotPanel.Controllers
         private readonly d940mhn2jd7mllContext _context;
         private readonly ILogger<AccountController> _logger;
         private readonly ITelegramService _telegramService;
+        private readonly ITelegramToken _telegramToken;
 
         public AccountController(UserManager<TelegramUser> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<TelegramUser> signInManager,
             d940mhn2jd7mllContext context,
             ILogger<AccountController> logger,
-            ITelegramService telegramService)
+            ITelegramService telegramService,
+            ITelegramToken telegramToken)
         {
             _context = context;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
             _telegramService = telegramService;
+            _telegramToken = telegramToken;
             _logger = logger;
             _logger.LogDebug("Account controller constructor");
         }
@@ -55,6 +62,22 @@ namespace RockBotPanel.Controllers
             }
             ViewBag.ShowFullView = true;
             return View(model);
+        }
+
+        private string HmacSha256Digest(string message, string token)
+        {
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            byte[] keyBytes;
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                keyBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(token));
+            }
+            byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+            HMACSHA256 cryptographer = new HMACSHA256(keyBytes);
+
+            byte[] bytes = cryptographer.ComputeHash(messageBytes);
+
+            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
         }
 
         [AllowAnonymous]
@@ -116,99 +139,80 @@ namespace RockBotPanel.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login(int? id, string first_name,
+            string last_name, string username, string photo_url, long? auth_date, string hash)
         {
-            //don't show validation code
-            ViewBag.ShowFullView = false;
-            return View();
-        }
-
-        /*
-         * In the first time show only Email
-         * In next times show full view, if email is right
-         */
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
-        {
-            TelegramUser user;
-            if (ModelState.IsValid)
+            if (id == null)
             {
-                user = await userManager.FindByEmailAsync(model.Email);
-                if(user == null)
-                {
-                    _logger.LogError($"There is no such user, {model.Email}");
-                    ModelState.AddModelError("", "There is no such user with this Email");
-                    ViewBag.ShowFullView = false;
-                    return View(model);
-                }
-                //send validation code
-                if(model.ValidationCode == null && model.Password == null)
-                {
-                    //Generate, send and save validation code
-                    string code = RandomHelper.GenerateRandomPassword(10);
-                    _telegramService.SendString(user.TelegramId, "Validation code: " + code);
-                    user.LastValidationCode = code;
-                    var result = await userManager.UpdateAsync(user);
+                ViewBag.ErrorMessage = "id is null";
+                return View("SiteError");
+            }
+            if (first_name == null)
+            {
+                ViewBag.ErrorMessage = "first_name is null";
+                return View("SiteError");
+            }
+            if (last_name == null)
+            {
+                ViewBag.ErrorMessage = "last_name is null";
+                return View("SiteError");
+            }
+            if (username == null)
+            {
+                ViewBag.ErrorMessage = "username is null";
+                return View("SiteError");
+            }
+            if (photo_url == null)
+            {
+                ViewBag.ErrorMessage = "photo_url is null";
+                return View("SiteError");
+            }
+            if (auth_date == null)
+            {
+                ViewBag.ErrorMessage = "auth_date is null";
+                return View("SiteError");
+            }
+            if (hash == null)
+            {
+                ViewBag.ErrorMessage = "hash is null";
+                return View("SiteError");
+            }
+            string data = $"auth_date={auth_date.Value}\nfirst_name={first_name}\nid={id.Value}\nlast_name={last_name}\nphoto_url={photo_url}\nusername={username}";
+            string siteHash = HmacSha256Digest(data, _telegramToken.Token);
+            if(siteHash != hash)
+            {
+                ViewBag.ErrorMessage = "Hash is not correct";
+                _logger.LogInformation("User can not login, enable debug, if you want to see authorization values");
+                _logger.LogDebug(data);
+                _logger.LogDebug($"siteHash={siteHash}");
+                return View("SiteError");
+            }
 
-                    if (!result.Succeeded)
-                    {
-                        _logger.LogCritical("Can not save validation code");
-                        ModelState.AddModelError("", "Can not save validation code");
-                        return View("SiteError");
-                    }
-                    //Okay, show validation code and password
-                    ViewBag.ShowFullView = true;
-                    return View(model);
-                }
-                try
+            List<TelegramUser> users = userManager.Users.ToList();
+            TelegramUser currentUser = null;
+            foreach(TelegramUser user in users)
+            {
+                if(user.TelegramId == id)
                 {
-                    //if password is null, site will show "Password is empty"
-                    if (model.Password == null)
-                    {
-                        _logger.LogError("User didn't write password");
-                        ModelState.AddModelError("", "Password is empty");
-                        return await LoginCorrupt(model, user);
-                    }
-                    //check validation code
-                    if (!user.CheckCode(model.ValidationCode))
-                    {
-                        _logger.LogError("Validatin code is not correct");
-                        ModelState.AddModelError("", "Validatin code is not correct");
-                        return await LoginCorrupt(model, user);
-                    }
-                    var result = await signInManager.PasswordSignInAsync(
-                        model.Email, model.Password, model.RememberMe, false);
-
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("index", "home");
-                    }
-
-                    ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
-                    _logger.LogInformation("Invalid Login Attempt");
+                    currentUser = user;
+                    break;
                 }
-                catch (Exception e)
+            }
+            if(currentUser == null)
+            {
+                currentUser = new TelegramUser { TelegramId = id.Value, UserName = $"{first_name} {last_name}" };
+                var result = await userManager.CreateAsync(currentUser);
+                if (!result.Succeeded)
                 {
-                    _logger.LogError(e.Message);
-                    ViewBag.ErrorMessage = e;
+                    _logger.LogInformation($"Can not register user with Telegram ID {id}");
+                    ModelState.AddModelError("", $"Can not register you");
                     return View("SiteError");
                 }
             }
-
-            _logger.LogInformation("LoginViewModel model is invalid");
-            //if Email is null, show full view
-            if(model.Email != null)
-            //if(ModelState.IsValid)
-            {
-                user = await userManager.FindByEmailAsync(model.Email);
-                ViewBag.ShowFullView = true;
-                return await LoginCorrupt(model, user);
-            }
-            //if Email is not correct, don't show full view
-            ViewBag.ShowFullView = false;
-            return View(model);
+            await signInManager.SignInAsync(currentUser, true);
+            return RedirectToAction("index", "home");
         }
+
 
         [HttpGet]
         public async Task<IActionResult> EditUser()
