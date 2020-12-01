@@ -80,56 +80,6 @@ namespace RockBotPanel.Controllers
             return BitConverter.ToString(bytes).Replace("-", "").ToLower();
         }
 
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // Copy data from RegisterViewModel to IdentityUser
-                var user = new TelegramUser
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    TelegramId = model.TelegramId
-                };
-
-                // Store user data in AspNetUsers database table
-                var result = await userManager.CreateAsync(user, model.Password);
-
-                // If user is successfully created, sign-in the user using
-                // SignInManager and redirect to index action of HomeController
-                if (result.Succeeded)
-                {
-                    //Set role "User" as default role
-                    result = await userManager.AddToRoleAsync(user, "User");
-                    if (result.Succeeded)
-                    {
-                        await signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToAction("index", "home");
-                    }
-                }
-
-                // If there are any errors, add them to the ModelState object
-                // which will be displayed by the validation summary tag helper
-                foreach (var error in result.Errors)
-                {
-                    _logger.LogError(error.Description);
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
-
-            _logger.LogInformation("RegisterViewModel model is invalid");
-            return View(model);
-        }
-
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
