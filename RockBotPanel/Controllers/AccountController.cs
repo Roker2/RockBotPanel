@@ -102,11 +102,6 @@ namespace RockBotPanel.Controllers
                 ViewBag.ErrorMessage = "first_name is null";
                 return View("SiteError");
             }
-            if (photo_url == null)
-            {
-                ViewBag.ErrorMessage = "photo_url is null";
-                return View("SiteError");
-            }
             if (auth_date == null)
             {
                 ViewBag.ErrorMessage = "auth_date is null";
@@ -117,7 +112,14 @@ namespace RockBotPanel.Controllers
                 ViewBag.ErrorMessage = "hash is null";
                 return View("SiteError");
             }
-            string data = $"auth_date={auth_date.Value}\nfirst_name={first_name}\nid={id.Value}\nlast_name={last_name}\nphoto_url={photo_url}\nusername={username}";
+            string data = $"auth_date={auth_date.Value}\nfirst_name={first_name}\nid={id.Value}";
+            //this values can be null
+            if (last_name != null)
+                data += $"\nlast_name={last_name}";
+            if (photo_url != null)
+                data += $"\nphoto_url={photo_url}";
+            if(username != null)
+                data += $"\n\nusername={username}";
             string siteHash = HmacSha256Digest(data, _telegramToken.Token);
             if(siteHash != hash)
             {
