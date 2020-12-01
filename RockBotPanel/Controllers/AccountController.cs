@@ -102,16 +102,6 @@ namespace RockBotPanel.Controllers
                 ViewBag.ErrorMessage = "first_name is null";
                 return View("SiteError");
             }
-            if (last_name == null)
-            {
-                ViewBag.ErrorMessage = "last_name is null";
-                return View("SiteError");
-            }
-            if (username == null)
-            {
-                ViewBag.ErrorMessage = "username is null";
-                return View("SiteError");
-            }
             if (photo_url == null)
             {
                 ViewBag.ErrorMessage = "photo_url is null";
@@ -150,7 +140,11 @@ namespace RockBotPanel.Controllers
             }
             if(currentUser == null)
             {
-                currentUser = new TelegramUser { TelegramId = id.Value, UserName = $"{first_name} {last_name}" };
+                currentUser = new TelegramUser { TelegramId = id.Value };
+                if (username != null)
+                    currentUser.UserName = username;
+                else
+                    currentUser.UserName = first_name;
                 var result = await userManager.CreateAsync(currentUser);
                 if (!result.Succeeded)
                 {
