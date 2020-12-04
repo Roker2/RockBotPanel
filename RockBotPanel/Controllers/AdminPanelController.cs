@@ -72,7 +72,8 @@ namespace RockBotPanel.Controllers
             }
             foreach(var email in model.SelectedEmails)
             {
-                msg.ToAddresses.Add(email);
+                if (email != null)
+                    msg.ToAddresses.Add(email);
             }
             _emailMessenger.SendMsg(msg);
             return RedirectToAction("Index", "AdminPanel");
