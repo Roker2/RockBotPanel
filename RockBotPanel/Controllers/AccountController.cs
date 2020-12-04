@@ -101,7 +101,7 @@ namespace RockBotPanel.Controllers
             if (photo_url != null)
                 data += $"\nphoto_url={photo_url}";
             if(username != null)
-                data += $"\n\nusername={username}";
+                data += $"\nusername={username}";
             string siteHash = HmacSha256Digest(data, _telegramToken.Token);
             if(siteHash != hash)
             {
