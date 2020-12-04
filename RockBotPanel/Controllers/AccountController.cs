@@ -46,24 +46,6 @@ namespace RockBotPanel.Controllers
             _logger.LogDebug("Account controller constructor");
         }
 
-        async Task<IActionResult> LoginCorrupt(LoginViewModel model, TelegramUser user)
-        {
-            //Generate, send and save validation code
-            string code = RandomHelper.GenerateRandomPassword(10);
-            _telegramService.SendString(user.TelegramId, "Validation code: " + code);
-            user.LastValidationCode = code;
-            var result = await userManager.UpdateAsync(user);
-
-            if (!result.Succeeded)
-            {
-                _logger.LogError("Can not save validation code");
-                ModelState.AddModelError("", "Can not save validation code");
-                return View("SiteError");
-            }
-            ViewBag.ShowFullView = true;
-            return View(model);
-        }
-
         private string HmacSha256Digest(string message, string token)
         {
             ASCIIEncoding encoding = new ASCIIEncoding();
