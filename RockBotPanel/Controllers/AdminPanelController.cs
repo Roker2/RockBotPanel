@@ -40,12 +40,15 @@ namespace RockBotPanel.Controllers
             List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> userList = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
             foreach (var user in userManager.Users)
             {
-                userList.Add(new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                if(user.Email != null)
                 {
-                    Text = $"{user.Email} ({user.UserName})",
-                    Value = user.Email,
-                    Selected = false
-                });
+                    userList.Add(new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                    {
+                        Text = $"{user.Email} ({user.UserName})",
+                        Value = user.Email,
+                        Selected = false
+                    });
+                }
             }
             model.UserList = userList.OrderBy(u => u.Value).ToList();
             return View(model);
@@ -72,8 +75,7 @@ namespace RockBotPanel.Controllers
             }
             foreach(var email in model.SelectedEmails)
             {
-                if (email != null)
-                    msg.ToAddresses.Add(email);
+                msg.ToAddresses.Add(email);
             }
             _emailMessenger.SendMsg(msg);
             return RedirectToAction("Index", "AdminPanel");
