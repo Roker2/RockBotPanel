@@ -133,7 +133,11 @@ namespace RockBotPanel.Controllers
                 if (!result.Succeeded)
                 {
                     _logger.LogInformation($"Can not register user with Telegram ID {id}");
-                    ModelState.AddModelError("", $"Can not register you");
+                    ViewBag.ErrorMessage = "Can not register you";
+                    foreach(IdentityError e in result.Errors)
+                    {
+                        ViewBag.ErrorMessage += Environment.NewLine + e.Description;
+                    }
                     return View("SiteError");
                 }
             }
